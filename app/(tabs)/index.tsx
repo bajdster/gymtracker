@@ -24,8 +24,8 @@ export default Home
 const styles = StyleSheet.create({
     homeMainBox:{
         flex:1,
-        paddingVertical:48,
-        paddingHorizontal:14
+        paddingVertical:24,
+        paddingHorizontal:14,
     },
     logoContainer:{
       width:'100%',

@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { transform } from '@babel/core'
+import { Collapsible } from './Collapsible'
 
 const HistoryShort = () => {
   return (
@@ -8,47 +9,58 @@ const HistoryShort = () => {
       <Text style={styles.sectionTitle}>Ostatni treninig</Text>
       <View style={styles.lastTrainingList}>
         <View style={styles.trainingListItem}>
-            <Text style={styles.listItemInfo}>Klatka</Text>
-            <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
-            <Text style={styles.listItemInfo}>Kilogramy</Text>
+            <Collapsible title="Klatka">
+                <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
+                <Text style={styles.listItemInfo}>Kilogramy</Text>
+            </Collapsible>
+
         </View>
         <View style={styles.trainingListItem}>
-            <Text style={styles.listItemInfo}>Plecy</Text>
-            <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
-            <Text style={styles.listItemInfo}>Kilogramy</Text>
+            <Collapsible title="Plecy">
+                <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
+                <Text style={styles.listItemInfo}>Kilogramy</Text>
+            </Collapsible>
         </View>
         <View style={styles.trainingListItem}>
-            <Text style={styles.listItemInfo}>Barki</Text>
-            <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
-            <Text style={styles.listItemInfo}>Kilogramy</Text>
+            <Collapsible title="Barki">
+                <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
+                <Text style={styles.listItemInfo}>Kilogramy</Text>
+            </Collapsible>
         </View>
         <View style={styles.trainingListItem}>
-            <Text style={styles.listItemInfo}>Triceps</Text>
-            <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
-            <Text style={styles.listItemInfo}>Kilogramy</Text>
+            <Collapsible title="Triceps">
+                <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
+                <Text style={styles.listItemInfo}>Kilogramy</Text>
+            </Collapsible>
         </View>
         <View style={styles.trainingListItem}>
-            <Text style={styles.listItemInfo}>Nogi</Text>
-            <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
-            <Text style={styles.listItemInfo}>Kilogramy</Text>
+            <Collapsible title="Nogi">
+                <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
+                <Text style={styles.listItemInfo}>Kilogramy</Text>
+            </Collapsible>
         </View>
         <View style={styles.trainingListItem}>
-            <Text style={styles.listItemInfo}>Biceps</Text>
-            <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
-            <Text style={styles.listItemInfo}>Kilogramy</Text>
+            <Collapsible title="Biceps">
+                <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
+                <Text style={styles.listItemInfo}>Kilogramy</Text>
+            </Collapsible>
         </View>
         <View style={styles.trainingListItem}>
-            <Text style={styles.listItemInfo}>Brzuch</Text>
-            <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
+            <Collapsible title="Brzuch">
+                <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
+                <Text style={styles.listItemInfo}>Czas</Text>
+            </Collapsible>
         </View>
         <View style={styles.trainingListItem}>
-            <Text style={styles.listItemInfo}>Drążek</Text>
-            <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
+            <Collapsible title="Drążek">
+                <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
+            </Collapsible>
         </View>
         <View style={styles.trainingListItem}>
-            <Text style={styles.listItemInfo}>Bieganie</Text>
-            <Text style={styles.listItemInfo}>Czas</Text>
-            <Text style={styles.listItemInfo}>Dystans</Text>
+        <Collapsible title="Bieganie">
+                <Text style={styles.listItemInfo}>Dystans</Text>
+                <Text style={styles.listItemInfo}>Czas</Text>
+            </Collapsible>
         </View>
       </View>
     </View>
