@@ -2,64 +2,80 @@ import { StyleSheet, TouchableOpacity, Text, View, Image } from 'react-native'
 import React from 'react'
 
 const AddTraining = () => {
+
+  interface Training {
+    trainingType:string,
+    text: string,
+    imageUrl: any
+  }
+
+  const trainings: Training[] = [
+    {
+      trainingType: 'chest',
+      text:'Klatka',
+      imageUrl: require("../assets/images/chest.png") // bezpośrednie użycie require
+    },
+    {
+      trainingType: 'back',
+      text:'Plecy',
+      imageUrl: require("../assets/images/back.png")
+    },
+    {
+      trainingType: 'shoulder',
+      text:'Barki',
+      imageUrl: require("../assets/images/shoulder.png")
+    },
+    {
+      trainingType: 'triceps',
+      text:'Triceps',
+      imageUrl: require("../assets/images/tricep.png")
+    },
+    {
+      trainingType: 'legs',
+      text:'Nogi',
+      imageUrl: require("../assets/images/leg.png")
+    },
+    {
+      trainingType: 'biceps',
+      text:'Biceps',
+      imageUrl: require("../assets/images/muscle.png")
+    },
+    {
+      trainingType: 'abs',
+      text:'Brzuch',
+      imageUrl: require("../assets/images/abs.png")
+    },
+    {
+      trainingType: 'pullups',
+      text:'Drążek',
+      imageUrl: require("../assets/images/pullups.png")
+    },
+    {
+      trainingType: 'running',
+      text:'Bieganie',
+      imageUrl: require("../assets/images/running.png")
+    },
+  ]
+
+
+  const addTrainingHandler = (trainingType:string) =>
+  {
+    console.log("Choosen training " + trainingType)
+  }
+
   return (
     <View>
       <Text style={styles.sectionTitle}>Dodaj trening</Text>
         <View style={styles.trainingIcons}>
-          <TouchableOpacity style={styles.trainingButton}>
+          {trainings.map((training)=>
+          {
+            return (<TouchableOpacity style={styles.trainingButton} onPress={()=> {addTrainingHandler(training.trainingType)}}>
             <View style={styles.training}>
-                <Image source={require("../assets/images/chest.png")} style={styles.trainingImage}/>
-                <Text style={styles.trainingIconText}>Klatka</Text> 
+                <Image source={training.imageUrl} style={styles.trainingImage}/>
+                <Text style={styles.trainingIconText}>{training.text}</Text> 
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.trainingButton}>
-          <View style={styles.training}>
-                <Image source={require("../assets/images/back.png")} style={styles.trainingImage}/>
-                <Text style={styles.trainingIconText}>Plecy</Text> 
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.trainingButton}>
-          <View style={styles.training}>
-                <Image source={require("../assets/images/shoulder.png")} style={styles.trainingImage}/>
-                <Text style={styles.trainingIconText}>Barki</Text> 
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.trainingButton}>
-          <View style={styles.training}>
-                <Image source={require("../assets/images/tricep.png")} style={styles.trainingImage}/>
-                <Text style={styles.trainingIconText}>Tripceps</Text> 
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.trainingButton}>
-          <View style={styles.training}>
-                <Image source={require("../assets/images/leg.png")} style={styles.trainingImage}/>
-                <Text style={styles.trainingIconText}>Nogi</Text> 
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.trainingButton}>
-          <View style={styles.training}>
-                <Image source={require("../assets/images/muscle.png")} style={styles.trainingImage}/>
-                <Text style={styles.trainingIconText}>Biceps</Text> 
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.trainingButton}>
-          <View style={styles.training}>
-                <Image source={require("../assets/images/abs.png")} style={styles.trainingImage}/>
-                <Text style={styles.trainingIconText}>Brzuch</Text> 
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.trainingButton}>
-          <View style={styles.training}>
-                <Image source={require("../assets/images/pullups.png")} style={styles.trainingImage}/>
-                <Text style={styles.trainingIconText}>Drążęk</Text> 
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.trainingButton}>
-          <View style={styles.training}>
-                <Image source={require("../assets/images/running.png")} style={styles.trainingImage}/>
-                <Text style={styles.trainingIconText}>Bieganie</Text> 
-            </View>
-          </TouchableOpacity>
+          </TouchableOpacity>)
+          })}
     </View>
     </View>
   )

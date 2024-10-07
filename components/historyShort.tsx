@@ -10,21 +10,51 @@ const HistoryShort = () => {
       <View style={styles.lastTrainingList}>
         <View style={styles.trainingListItem}>
             <Collapsible title="Klatka">
-                <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
-                <Text style={styles.listItemInfo}>Kilogramy</Text>
+                <Collapsible title="Wyciskanie na sztandze leżąc">
+                    <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
+                    <Text style={styles.listItemInfo}>Kilogramy</Text>
+                </Collapsible>
+                <Collapsible title="Rozpiętki na wyciągu">
+                    <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
+                    <Text style={styles.listItemInfo}>Kilogramy</Text>
+                </Collapsible>
+                <Collapsible title="Wyciskanie hantli na ławce dodatniej">
+                    <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
+                    <Text style={styles.listItemInfo}>Kilogramy</Text>
+                </Collapsible>
             </Collapsible>
 
         </View>
         <View style={styles.trainingListItem}>
             <Collapsible title="Plecy">
-                <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
-                <Text style={styles.listItemInfo}>Kilogramy</Text>
+                <Collapsible title="Ściąganie drążka nachwytem do klatki">
+                    <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
+                    <Text style={styles.listItemInfo}>Kilogramy</Text>
+                </Collapsible>
+                <Collapsible title="Martwy ciąg">
+                    <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
+                    <Text style={styles.listItemInfo}>Kilogramy</Text>
+                </Collapsible>
+                <Collapsible title="Przyciąganie wyciągu dolnego oburącz">
+                    <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
+                    <Text style={styles.listItemInfo}>Kilogramy</Text>
+                </Collapsible>
             </Collapsible>
         </View>
         <View style={styles.trainingListItem}>
             <Collapsible title="Barki">
-                <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
-                <Text style={styles.listItemInfo}>Kilogramy</Text>
+                <Collapsible title="Arnoldki - wyciskanie hantli nad głowę z rotacją">
+                    <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
+                    <Text style={styles.listItemInfo}>Kilogramy</Text>
+                </Collapsible>
+                <Collapsible title="Odwodzenie ramion w bok z hantlami">
+                    <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
+                    <Text style={styles.listItemInfo}>Kilogramy</Text>
+                </Collapsible>
+                <Collapsible title="Wyciskanie sztangi nad głowę - żołnierskie">
+                    <Text style={styles.listItemInfo}>Ilość powtórzeń</Text>
+                    <Text style={styles.listItemInfo}>Kilogramy</Text>
+                </Collapsible>
             </Collapsible>
         </View>
         <View style={styles.trainingListItem}>
