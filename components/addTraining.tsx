@@ -1,5 +1,6 @@
 import { StyleSheet, TouchableOpacity, Text, View, Image } from 'react-native'
 import React from 'react'
+import { router } from 'expo-router'
 
 const AddTraining = () => {
 
@@ -60,7 +61,7 @@ const AddTraining = () => {
 
   const addTrainingHandler = (trainingType:string) =>
   {
-    console.log("Choosen training " + trainingType)
+    router.push({pathname: "/trainingDetails/trainingDetails", params: {type: trainingType}})
   }
 
   return (
@@ -69,7 +70,7 @@ const AddTraining = () => {
         <View style={styles.trainingIcons}>
           {trainings.map((training)=>
           {
-            return (<TouchableOpacity style={styles.trainingButton} onPress={()=> {addTrainingHandler(training.trainingType)}}>
+            return (<TouchableOpacity style={styles.trainingButton} onPress={()=> {addTrainingHandler(training.trainingType)}} key={training.text}>
             <View style={styles.training}>
                 <Image source={training.imageUrl} style={styles.trainingImage}/>
                 <Text style={styles.trainingIconText}>{training.text}</Text> 

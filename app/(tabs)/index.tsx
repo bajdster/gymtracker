@@ -6,9 +6,6 @@ import HistoryShort from '@/components/historyShort'
 const Home = () => {
   return (
     <ScrollView style={styles.homeMainBox}>
-      <View style={styles.logoContainer}>
-        <Image source={require("../../assets/images/logo.png")} style={{width:150, height:100}}/>
-      </View>
       <View style={styles.homePageSection}>
         <AddTraining/>
       </View>
@@ -24,13 +21,8 @@ export default Home
 const styles = StyleSheet.create({
     homeMainBox:{
         flex:1,
-        paddingVertical:20,
+        paddingVertical:8,
         paddingHorizontal:14,
-    },
-    logoContainer:{
-      width:'100%',
-      alignItems:'center',
-      marginTop:4
     },
     homePageSection:{
       width:'100%'
@@ -44,3 +36,5 @@ const styles = StyleSheet.create({
     },
     
 })
+
+//https://console.firebase.google.com/u/0/project/gymtracker-c5f99/database/gymtracker-c5f99-default-rtdb/data
