@@ -13,7 +13,7 @@ const exercises:{} = {
       "Martwy ciąg",
       "Wiosłowanie hantlami"
     ],
-    shoulders: [
+    shoulder: [
       "Wyciskanie sztangi nad głowę - żołnierskie",
       "Arnoldki -  wyciskanie hantli nad głowę z rotacją",
       "Unoszenie hantli w bok",

@@ -10,6 +10,11 @@ import Running from '@/components/trainings/running';
 
 const TrainingDetails = () => {
 
+  interface trainingDetails {
+    trainingType: string,
+    repsState: []
+  }
+
   const {type} = useLocalSearchParams()
   const trainingTitles:{[key: string]:string} = {
     chest: 'Klatka',
@@ -33,7 +38,6 @@ const TrainingDetails = () => {
     setDate(currentDate);
   };
 
-
   const showDatepicker = () => {
     setShow(true);
   };
@@ -43,12 +47,22 @@ const TrainingDetails = () => {
     console.log(date.toUTCString())
 }, [date])
 
+const sendTraining = ({trainingType, repsState}:trainingDetails) =>
+{
+  //need to send this ot DB and sign some Id to it
+  console.log({
+    date,
+    trainingType,
+    repsState
+  })
+}
+
 
   return (
     <View style={styles.detailsMainBox}>
         <View>
             <Text style={styles.sectionTitle}>Dodaj trening</Text>
-            <Text style={[styles.sectionTitle, {fontSize:32}]}>{type ? trainingTitles[`${type}`]: 'Nieznany trening'}</Text>
+            <Text style={[styles.sectionTitle, {fontSize:28}]}>{type ? trainingTitles[`${type}`]: 'Nieznany trening'}</Text>
         </View>
         <View style={styles.calendarSection}>
           <Text style={{color:'white', marginRight:10}}>Wybierz datę</Text>
@@ -57,11 +71,11 @@ const TrainingDetails = () => {
           </TouchableOpacity>
           <Text style={styles.calendarDate}>{date.toLocaleDateString()}</Text>
         </View>
-        <View>
-          {(type=== 'chest' || type === 'back' || type==="shoulder" || type==="triceps" || type==="legs" || type ==='biceps') && <Gym trainingType={type}/>}
-          {type ==='abs' && <Abs/>}
-          {type ==='pullups' && <Pullups/>}
-          {type ==='running' && <Running/>}
+        <View style={{flex:1}}>
+          {(type=== 'chest' || type === 'back' || type==="shoulder" || type==="triceps" || type==="legs" || type ==='biceps') && <Gym trainingType={type} onSendHandler={sendTraining}/>}
+          {type ==='abs' && <Abs trainingType={type}/>}
+          {type ==='pullups' && <Pullups trainingType={type}/>}
+          {type ==='running' && <Running trainingType={type}/>}
         </View>
 
 
@@ -85,10 +99,11 @@ const styles = StyleSheet.create({
         flex:1,
         paddingVertical:42,
         paddingHorizontal:14,
+
     },
     sectionTitle:{
         color:'white',
-        fontSize:20,
+        fontSize:16,
         fontWeight:'bold',
         padding:4,
         marginBottom:2,
@@ -98,7 +113,7 @@ const styles = StyleSheet.create({
       width:'100%',
       justifyContent:'space-evenly',
       alignItems:'center',
-      marginTop:10,
+      marginTop:8,
       borderWidth:1,
       borderColor:'gray',
       borderRadius:10,
@@ -106,7 +121,7 @@ const styles = StyleSheet.create({
     },
     calendarButton:{
       backgroundColor:'#cbf078', 
-      padding:16,
+      padding:12,
       marginRight:24,
       borderRadius:50
     },
