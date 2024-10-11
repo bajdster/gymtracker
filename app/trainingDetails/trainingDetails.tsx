@@ -47,7 +47,7 @@ const TrainingDetails = () => {
     console.log(date.toUTCString())
 }, [date])
 
-const sendTraining = ({trainingType, repsState}:trainingDetails) =>
+const sendTraining = ({trainingType, repsState}:trainingDetails):void =>
 {
   //need to send this ot DB and sign some Id to it
   console.log({

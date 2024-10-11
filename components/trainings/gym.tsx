@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 import exercises from '@/constants/Excercises';
 import { Picker } from '@react-native-picker/picker';
@@ -6,7 +6,12 @@ import AddTrainingButton from '../addTrainingButton';
 
 interface GymProps {
   trainingType: string,
-  onSendHandler: ()=> void
+  onSendHandler: (trainingDetails:trainingDetails)=> void
+}
+
+interface trainingDetails {
+  trainingType: string;
+  repsState: []; 
 }
 
 const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler }) => {
@@ -43,12 +48,21 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler }) => {
 
   console.log(repsState);
 
-  const addTrainingHandler = () =>{
+  const addTrainingHandler = () => {
+    const hasEmptyFields = repsState.some((series) => {
+      return !series.reps || !series.weight;
+    });
+  
+    if (hasEmptyFields) {
+      Alert.alert("Proszę uzupełnić ilość powtórzeń i ciężar");
+      return;
+    }
+  
     onSendHandler({
       trainingType,
       repsState,
-    })
-  }
+    });
+  };
 
   return (
     <ScrollView>
@@ -57,7 +71,7 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler }) => {
           <Text style={styles.inputLabel}>Wybierz ćwiczenie</Text>
           <Picker
             dropdownIconColor="#cbf078"
-            style={{ backgroundColor: 'black', width: 200 }}
+            style={{ backgroundColor: 'black', width: 250 }}
             selectedValue={selectedExercise}
             onValueChange={(itemValue) => setSelectedExercise(itemValue)}
           >
