@@ -7,12 +7,15 @@ import Gym from '@/components/trainings/gym';
 import Abs from '@/components/trainings/abs';
 import Pullups from '@/components/trainings/pullups';
 import Running from '@/components/trainings/running';
+import { sendTrainingToDB} from '@/lib/trainingManagement';
 
 const TrainingDetails = () => {
 
   interface trainingDetails {
+    date:string
     trainingType: string,
-    repsState: []
+    repsState: [],
+    selectedExercise:string
   }
 
   const {type} = useLocalSearchParams()
@@ -47,13 +50,14 @@ const TrainingDetails = () => {
     console.log(date.toUTCString())
 }, [date])
 
-const sendTraining = ({trainingType, repsState}:trainingDetails):void =>
+const sendTraining = ({trainingType, repsState, selectedExercise}:trainingDetails):void =>
 {
   //need to send this ot DB and sign some Id to it
-  console.log({
-    date,
+  sendTrainingToDB({
+    date: date.toLocaleDateString(),
     trainingType,
-    repsState
+    repsState,
+    selectedExercise
   })
 }
 

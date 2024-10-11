@@ -11,7 +11,8 @@ interface GymProps {
 
 interface trainingDetails {
   trainingType: string;
-  repsState: []; 
+  repsState: [],
+  selectedExercise:string
 }
 
 const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler }) => {
@@ -54,13 +55,14 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler }) => {
     });
   
     if (hasEmptyFields) {
-      Alert.alert("Proszę uzupełnić ilość powtórzeń i ciężar");
+      Alert.alert("Proszę uzupełnić dane treningu", "Należy uzupełnić ilość powtórzeń i ciężar");
       return;
     }
   
     onSendHandler({
       trainingType,
       repsState,
+      selectedExercise
     });
   };
 
