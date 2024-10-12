@@ -11,7 +11,7 @@ import { sendTrainingToDB} from '@/lib/trainingManagement';
 
 const TrainingDetails = () => {
 
-  interface trainingDetails {
+  interface TrainingDetails {
     date:string
     trainingType: string,
     repsState: [],
@@ -50,16 +50,18 @@ const TrainingDetails = () => {
     console.log(date.toUTCString())
 }, [date])
 
-const sendTraining = ({trainingType, repsState, selectedExercise}:trainingDetails):void =>
-{
-  //need to send this ot DB and sign some Id to it
-  sendTrainingToDB({
-    date: date.toLocaleDateString(),
+const sendTraining = async ({ trainingType, repsState, selectedExercise }: TrainingDetails): void => {
+  
+  // Formatowanie daty w formacie YYYY-MM-DD
+  const formattedDate = date.toISOString().split('T')[0]; // Przykład: "2024-10-12"
+  
+  await sendTrainingToDB({
+    date: formattedDate, // Użycie sformatowanej daty
     trainingType,
     repsState,
-    selectedExercise
-  })
-}
+    selectedExercise,
+  });
+};
 
 
   return (

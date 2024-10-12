@@ -1,62 +1,9 @@
 import { StyleSheet, TouchableOpacity, Text, View, Image } from 'react-native'
 import React from 'react'
 import { router } from 'expo-router'
+import { trainings } from '@/constants/Excercises'
 
-const AddTraining = () => {
 
-  interface Training {
-    trainingType:string,
-    text: string,
-    imageUrl: any
-  }
-
-  const trainings: Training[] = [
-    {
-      trainingType: 'chest',
-      text:'Klatka',
-      imageUrl: require("../assets/images/chest.png") // bezpośrednie użycie require
-    },
-    {
-      trainingType: 'back',
-      text:'Plecy',
-      imageUrl: require("../assets/images/back.png")
-    },
-    {
-      trainingType: 'shoulder',
-      text:'Barki',
-      imageUrl: require("../assets/images/shoulder.png")
-    },
-    {
-      trainingType: 'triceps',
-      text:'Triceps',
-      imageUrl: require("../assets/images/tricep.png")
-    },
-    {
-      trainingType: 'legs',
-      text:'Nogi',
-      imageUrl: require("../assets/images/leg.png")
-    },
-    {
-      trainingType: 'biceps',
-      text:'Biceps',
-      imageUrl: require("../assets/images/muscle.png")
-    },
-    {
-      trainingType: 'abs',
-      text:'Brzuch',
-      imageUrl: require("../assets/images/abs.png")
-    },
-    {
-      trainingType: 'pullups',
-      text:'Drążek',
-      imageUrl: require("../assets/images/pullups.png")
-    },
-    {
-      trainingType: 'running',
-      text:'Bieganie',
-      imageUrl: require("../assets/images/running.png")
-    },
-  ]
 
 
   const addTrainingHandler = (trainingType:string) =>
@@ -64,6 +11,9 @@ const AddTraining = () => {
     router.push({pathname: "/trainingDetails/trainingDetails", params: {type: trainingType}})
   }
 
+  const AddTraining = () => {
+
+  
   return (
     <View>
       <Text style={styles.sectionTitle}>Dodaj trening</Text>
@@ -81,6 +31,7 @@ const AddTraining = () => {
     </View>
   )
 }
+
 
 export default AddTraining
 
