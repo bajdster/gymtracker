@@ -6,6 +6,20 @@ interface trainingDetails {
     selectedExercise:string;
   }
 
+  interface RepsState {
+    weight: number;
+    reps: number;   
+  }
+  
+  interface Training {
+    date: string;
+    id: string;
+    repsState: RepsState[]; 
+    selectedExercise: string;
+    trainingType: string;
+  }
+  
+
 export async function sendTrainingToDB(trainingData:trainingDetails)
 {
     try
@@ -30,6 +44,27 @@ export async function sendTrainingToDB(trainingData:trainingDetails)
         console.error("Wystąpił błąd:", error);
     }
 
+}
+
+export async function fetchAllTrainings(trainingData:trainingDetails)
+{
+  try {
+    const response = await fetch('https://gymtracker-c5f99-default-rtdb.firebaseio.com/trainings.json');
+    const data = await response.json();
+
+    if (typeof data === 'object' && data !== null) {
+      const trainingsArray: Training[] = Object.keys(data).map((key) => ({
+        id: key,
+        ...data[key]
+      }));
+
+      return trainingsArray
+    } else {
+      console.error("Unexpected data format:", data);
+    }
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
 }
 
 // Firebase Realtime Database obsługuje podstawowe filtrowanie danych przy użyciu zapytań z metodami takimi jak orderBy, equalTo, startAt, endAt oraz limitToFirst i limitToLast.

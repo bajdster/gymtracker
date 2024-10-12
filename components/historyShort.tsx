@@ -45,7 +45,7 @@ const HistoryShort: React.FC = () => {
     fetchTrainings();
   }, []);
 
-  const trainingTypes = ['chest', 'back', 'shoulder', 'legs', 'biceps', 'triceps'];
+  const trainingTypes = ['chest', 'back', 'shoulder', 'legs', 'biceps', 'triceps', 'abs', 'pullups', 'running'];
 
   const getSortedTrainingsByType = (type: string) => {
     const filteredTrainings = trainings.filter((training) => training.trainingType === type);
@@ -75,10 +75,26 @@ const HistoryShort: React.FC = () => {
               <Collapsible title={type}>
                 {latestTrainings.map((training) => (
                   <Collapsible key={training.id} title={training.selectedExercise}>
-                    <View>
-                      <Text style={styles.listItemInfo}>
-                        Ilość powtórzeń: {training.repsState.map(rep => `${rep.reps} (${rep.weight} kg)`).join(", ")}
-                      </Text>
+                    <View style={styles.tableContainer}>
+                      <View style={{alignItems:'center', marginBottom:10}}>
+                          <Text style={{color:'white', marginLeft:50}}>Ilość powtórzeń</Text>
+                          {training.repsState.map((rep, index) => 
+                            <View style={{flexDirection:'row', alignItems:'center'}} key={index}>
+                              <Text style={{color:'white', marginRight:10}}>{`Seria ${index+1}`}</Text>
+                              <View style={styles.tableCell}>   
+                                <Text style={{color:'white'}}>{rep.reps}</Text>
+                              </View>
+                            </View>
+                            )}
+                      </View>
+                      <View style={{alignItems:'center'}}>
+                          <Text style={{color:'white'}}>Ciężar (kg)</Text>
+                          {training.repsState.map((rep, index) => 
+                            <View style={styles.tableCell} key={index}>
+                              
+                              <Text style={{color:'white'}}>{rep.weight}</Text>
+                            </View>)}
+                      </View>
                     </View>
                   </Collapsible>
                 ))}
@@ -113,6 +129,16 @@ const styles = StyleSheet.create({
   },
   listItemInfo: {
     color: 'white'
+  },
+  tableContainer:{
+    flexDirection:'row',
+    justifyContent:'space-around'
+  },
+  tableCell:{
+    borderWidth:1,
+    borderColor:'#e0ffcd',
+    alignItems:'center',
+    width:100,
   }
 });
 

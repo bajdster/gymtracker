@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native'
 import React, {useEffect, useState} from 'react'
-import { useLocalSearchParams } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Gym from '@/components/trainings/gym';
@@ -50,7 +50,7 @@ const TrainingDetails = () => {
     console.log(date.toUTCString())
 }, [date])
 
-const sendTraining = async ({ trainingType, repsState, selectedExercise }: TrainingDetails): void => {
+const sendTraining = async ({ trainingType, repsState, selectedExercise }: TrainingDetails): Promise<void> => {
   
   // Formatowanie daty w formacie YYYY-MM-DD
   const formattedDate = date.toISOString().split('T')[0]; // Przykład: "2024-10-12"
@@ -61,6 +61,7 @@ const sendTraining = async ({ trainingType, repsState, selectedExercise }: Train
     repsState,
     selectedExercise,
   });
+  router.push("/")
 };
 
 
