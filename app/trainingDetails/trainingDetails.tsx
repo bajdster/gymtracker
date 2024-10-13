@@ -53,10 +53,10 @@ const TrainingDetails = () => {
 const sendTraining = async ({ trainingType, repsState, selectedExercise }: TrainingDetails): Promise<void> => {
   
   // Formatowanie daty w formacie YYYY-MM-DD
-  const formattedDate = date.toISOString().split('T')[0]; // Przykład: "2024-10-12"
+  const formattedDate = date.toISOString().split('T')[0];
   
   await sendTrainingToDB({
-    date: formattedDate, // Użycie sformatowanej daty
+    date: formattedDate, 
     trainingType,
     repsState,
     selectedExercise,
@@ -80,7 +80,7 @@ const sendTraining = async ({ trainingType, repsState, selectedExercise }: Train
         </View>
         <View style={{flex:1}}>
           {(type=== 'chest' || type === 'back' || type==="shoulder" || type==="triceps" || type==="legs" || type ==='biceps') && <Gym trainingType={type} onSendHandler={sendTraining}/>}
-          {type ==='abs' && <Abs trainingType={type}/>}
+          {type ==='abs' && <Abs trainingType={type} onSendHandler={sendTraining}/>}
           {type ==='pullups' && <Pullups trainingType={type}/>}
           {type ==='running' && <Running trainingType={type}/>}
         </View>

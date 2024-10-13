@@ -27,7 +27,7 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler }) => {
     const parsedCount = parseInt(value, 10);
     if (!isNaN(parsedCount) && parsedCount >= 0) {
       const newRepsState = Array.from({ length: parsedCount }, (_, i) => ({
-        reps: repsState[i]?.reps || '', // Zabezpieczenie
+        reps: repsState[i]?.reps || '8', // Zabezpieczenie
         weight: repsState[i]?.weight || '', // Zabezpieczenie
       }));
       setRepsState(newRepsState);

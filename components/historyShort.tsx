@@ -18,9 +18,11 @@ interface Training {
 
 const HistoryShort: React.FC = () => {
   const [trainings, setTrainings] = useState<Training[]>([]);
+  const [isLoading, setIsLoading] = useState(true); 
 
   const fetchTrainings = async () => {
     try {
+      setIsLoading(true); 
       const response = await fetch('https://gymtracker-c5f99-default-rtdb.firebaseio.com/trainings.json?orderBy=%22date%22&limitToLast=20');
       const data = await response.json();
 
@@ -38,6 +40,9 @@ const HistoryShort: React.FC = () => {
       }
     } catch (error) {
       console.error("Error fetching data:", error);
+    }
+    finally{
+      setIsLoading(false); 
     }
   };
 
@@ -57,6 +62,10 @@ const HistoryShort: React.FC = () => {
       return dateB.getTime() - dateA.getTime();
     });
   };
+
+  if (isLoading) {
+    return <Text style={{ color: 'white', fontSize:22 }}>Ładowanie...</Text>; 
+  }
 
   return (
     <View style={{ marginBottom: 10 }}>
@@ -87,14 +96,16 @@ const HistoryShort: React.FC = () => {
                             </View>
                             )}
                       </View>
+                      {training.repsState.some(rep => rep.weight) && (
                       <View style={{alignItems:'center'}}>
-                          <Text style={{color:'white'}}>Ciężar (kg)</Text>
-                          {training.repsState.map((rep, index) => 
-                            <View style={styles.tableCell} key={index}>
-                              
-                              <Text style={{color:'white'}}>{rep.weight}</Text>
-                            </View>)}
+                        <Text style={{color:'white'}}>Ciężar (kg)</Text>
+                        {training.repsState.map((rep, index) => (
+                          <View style={styles.tableCell} key={index}>
+                            <Text style={{color:'white'}}>{rep.weight}</Text>
+                          </View>
+                        ))}
                       </View>
+                    )}
                     </View>
                   </Collapsible>
                 ))}
