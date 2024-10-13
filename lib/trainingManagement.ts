@@ -46,7 +46,7 @@ export async function sendTrainingToDB(trainingData:trainingDetails)
 
 }
 
-export async function fetchAllTrainings(trainingData:trainingDetails)
+export async function fetchAllTrainings()
 {
   try {
     const response = await fetch('https://gymtracker-c5f99-default-rtdb.firebaseio.com/trainings.json');

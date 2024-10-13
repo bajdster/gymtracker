@@ -66,6 +66,11 @@ const HistoryShort: React.FC = () => {
   if (isLoading) {
     return <Text style={{ color: 'white', fontSize:22 }}>Ładowanie...</Text>; 
   }
+  
+  if(trainings.length <= 0)
+  {
+    return <Text style={{ color: 'white', fontSize:22 }}>Nie masz jeszcze dodanych treningów</Text>
+  }
 
   return (
     <View style={{ marginBottom: 10 }}>
@@ -86,10 +91,10 @@ const HistoryShort: React.FC = () => {
                   <Collapsible key={training.id} title={training.selectedExercise}>
                     <View style={styles.tableContainer}>
                       <View style={{alignItems:'center', marginBottom:10}}>
-                          <Text style={{color:'white', marginLeft:50}}>Ilość powtórzeń</Text>
+                          <Text style={{color:'white', marginLeft:50}}>{type==="running" ?'Czas' : 'Ilość powtórzeń'}</Text>
                           {training.repsState.map((rep, index) => 
                             <View style={{flexDirection:'row', alignItems:'center'}} key={index}>
-                              <Text style={{color:'white', marginRight:10}}>{`Seria ${index+1}`}</Text>
+                              {type === 'running' ? <Text style={{color:'white', marginRight:10}}>Bieg</Text> :<Text style={{color:'white', marginRight:10}}>{`Seria ${index+1}`}</Text>}
                               <View style={styles.tableCell}>   
                                 <Text style={{color:'white'}}>{rep.reps}</Text>
                               </View>

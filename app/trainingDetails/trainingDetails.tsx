@@ -4,8 +4,7 @@ import { router, useLocalSearchParams } from 'expo-router'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Gym from '@/components/trainings/gym';
-import Abs from '@/components/trainings/abs';
-import Pullups from '@/components/trainings/pullups';
+import Calistenic from '@/components/trainings/calistenic';
 import Running from '@/components/trainings/running';
 import { sendTrainingToDB} from '@/lib/trainingManagement';
 
@@ -80,9 +79,8 @@ const sendTraining = async ({ trainingType, repsState, selectedExercise }: Train
         </View>
         <View style={{flex:1}}>
           {(type=== 'chest' || type === 'back' || type==="shoulder" || type==="triceps" || type==="legs" || type ==='biceps') && <Gym trainingType={type} onSendHandler={sendTraining}/>}
-          {type ==='abs' && <Abs trainingType={type} onSendHandler={sendTraining}/>}
-          {type ==='pullups' && <Pullups trainingType={type}/>}
-          {type ==='running' && <Running trainingType={type}/>}
+          {(type ==='abs' || type ==='pullups' )&& <Calistenic trainingType={type} onSendHandler={sendTraining}/>}
+          {type ==='running' && <Running trainingType={type} onSendHandler={sendTraining}/>}
         </View>
 
 

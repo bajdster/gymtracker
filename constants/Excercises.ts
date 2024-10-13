@@ -58,7 +58,6 @@ const exercises:{} = {
         "Bieg 3km",
         "Bieg 5km",
         "Bieg 10km",
-        "Interwały"
     ]
 
   };

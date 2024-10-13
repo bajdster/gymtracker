@@ -15,7 +15,7 @@ interface trainingDetails {
   selectedExercise:string
 }
 
-const Abs: React.FC<AbsProps> = ({trainingType, onSendHandler}) => {
+const Calistenic: React.FC<AbsProps> = ({trainingType, onSendHandler}) => {
 
   const [seriesCount, setSeriesCount] = useState<string>('4');
   const [repsState, setRepsState] = useState<{ reps: string; weight: string }[]>([{ reps: '8', weight: '' },{ reps: '8', weight: '' },{ reps: '8', weight: '' },{ reps: '8', weight: '' }]); 
@@ -127,7 +127,7 @@ const Abs: React.FC<AbsProps> = ({trainingType, onSendHandler}) => {
   );
 }
 
-export default Abs
+export default Calistenic
 
 const styles = StyleSheet.create({
   excerciseDropdown: {

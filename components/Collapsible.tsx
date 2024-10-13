@@ -2,9 +2,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { PropsWithChildren, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
 import { Colors } from '@/constants/Colors';
-import { trainings } from '@/constants/Excercises';
 
-export function Collapsible({ children, title }: PropsWithChildren & { title: string}) {
+export function Collapsible({ children, title, type, selectedExcercise }: PropsWithChildren & { title: string, type?:string, selectedExcercise?:string}) {
   const [isOpen, setIsOpen] = useState(false);
   const theme = useColorScheme() ?? 'light';
 
@@ -20,7 +19,12 @@ export function Collapsible({ children, title }: PropsWithChildren & { title: st
             color={theme === 'light' ? Colors.light.icon : Colors.dark.icon}
             />
             <Text style={{color:'white'}}>{title}</Text>
+            {type && selectedExcercise && <View style={{borderWidth:1, borderColor:'white', padding: 4,}}>
+              <Text style={{color:'white'}}>{type}</Text>
+              <Text style={{color:'white'}}>{selectedExcercise}</Text>
+              </View>}
       </TouchableOpacity>
+      
       {isOpen && <View style={styles.content}>{children}</View>}
     </View>
   );
