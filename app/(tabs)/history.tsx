@@ -30,13 +30,25 @@ const History = () => {
   }, []);
 
   const renderItem = ({ item }: { item: Training }) => (
-    <Collapsible title={item.date} type={item.trainingType} selectedExcercise={item.selectedExercise}>
-      {item.repsState.map((rep, index) => (
-        <View key={index}>
-          <Text style={styles.textStyle}>Set {index + 1} - Reps: {rep.reps}, Weight: {rep.weight}</Text>
-        </View>
-      ))}
-    </Collapsible>
+<Collapsible title={item.date} type={item.trainingType} selectedExcercise={item.selectedExercise}>
+  {item.repsState.map((rep, index) => (
+    <View key={index} style={styles.trainingDetails}>
+      {item.trainingType === 'running' && (
+        <Text style={styles.textStyle}>Bieg {index + 1} - Czas: {rep.reps}</Text>
+      )}
+
+      {(item.trainingType === 'pullups' || item.trainingType === 'abs') && (
+        <Text style={styles.textStyle}>Seria {index + 1} - Ilość powtórzeń: {rep.reps}</Text>
+      )}
+
+      {item.trainingType !== 'running' && item.trainingType !== 'abs' && item.trainingType !== 'pullups' && (
+        <Text style={styles.textStyle}>
+          Seria {index + 1} - Ilość powtórzeń: {rep.reps}, Ciężar: {rep.weight} kg
+        </Text>
+      )}
+    </View>
+  ))}
+</Collapsible>
   );
 
   return (
@@ -74,5 +86,12 @@ const styles = StyleSheet.create({
   textStyle: {
     color: 'white',
     fontSize: 16,
+  },
+  trainingDetails:{
+    backgroundColor:'#393e46',
+    padding:4,
+    borderRadius:4,
+    width:'90%',
+    marginBottom:4
   },
 });
