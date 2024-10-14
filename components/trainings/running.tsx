@@ -18,7 +18,7 @@ interface trainingDetails {
 const Running:React.FC<RunningProps> = ({trainingType, onSendHandler}) => {
 
   const [seriesCount, setSeriesCount] = useState<string>('1');
-  const [repsState, setRepsState] = useState<{ reps: string; weight: string }[]>([{ reps: '8', weight: '' }]); 
+  const [repsState, setRepsState] = useState<{ reps: string; weight: string }[]>([{ reps: '00:04:00', weight: '' }]); 
 
   const availableExercises: string[] = exercises[trainingType]; 
   const [selectedExercise, setSelectedExercise] = useState<string>(availableExercises[0]); 

@@ -132,6 +132,11 @@ export default Calistenic
 const styles = StyleSheet.create({
   excerciseDropdown: {
     marginTop: 12,
+    flexDirection:'row',
+    alignItems:'center',
+    borderWidth:1,
+    borderColor:'white',
+    paddingVertical: 4
   },
   excerciseAmountInputsContainer: {
     marginTop: 10,
@@ -144,20 +149,24 @@ const styles = StyleSheet.create({
   inputLabel: {
     color: 'white',
     marginBottom: 6,
+    marginLeft:2
   },
   amountInput: {
     backgroundColor: '#e0ffcd',
     padding: 8,
     borderRadius: 10,
     fontSize: 20,
-    width: 120,
+    width: 80,
     marginRight: 10,
   },
   pickerContainer: {
     marginTop: 2,
+    flexDirection:'row',
+    flexWrap:'wrap'
   },
   inputRow: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
+    marginLeft:20,
+    marginRight:20
   },
 });

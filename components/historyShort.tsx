@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Collapsible } from './Collapsible';
 import { trainings as trainingTypes } from '@/constants/Excercises';
+import { fetchHistoryShortTrainings } from '@/lib/trainingManagement';
 
 interface RepsState {
   weight: number;
@@ -23,7 +24,7 @@ const HistoryShort: React.FC = () => {
   const fetchTrainings = async () => {
     try {
       setIsLoading(true); 
-      const response = await fetch('https://gymtracker-c5f99-default-rtdb.firebaseio.com/trainings.json?orderBy=%22date%22&limitToLast=20');
+      const response = await fetchHistoryShortTrainings()
       const data = await response.json();
 
       console.log("Received data from Firebase:", data);

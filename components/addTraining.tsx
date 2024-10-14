@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     trainingImage:{
         width:50,
         height:50,
-        tintColor:'white',
+        tintColor:'#cbf078',
     }
   
 })

@@ -37,4 +37,7 @@ const styles = StyleSheet.create({
     
 })
 
-//https://console.firebase.google.com/u/0/project/gymtracker-c5f99/database/gymtracker-c5f99-default-rtdb/data
+//implement deleting trenings from history tab
+//maybe create store for statistics ?
+//modal when training is added?
+// create separate file with types to implement DRY 

@@ -12,7 +12,7 @@ export default function TabLayout() {
 
   return (
     <>
-      <View style={{width:'100%', alignItems:'center', paddingTop:14, height:100, justifyContent:'center'}}>
+      <View style={{width:'100%', alignItems:'center', paddingTop:14, height:100, justifyContent:'center', marginTop:10}}>
         <Image source={require("../../assets/images/logo.png")} style={{width:150, height:70}}/>
       </View>
       <Tabs
@@ -33,7 +33,7 @@ export default function TabLayout() {
         <Tabs.Screen
             name="history"
             options={{
-              title: 'History',
+              title: 'Historia',
               headerShown:false,
               tabBarIcon: ({ color, focused }) => (
                 <FontAwesome name="history" size={24} color={color}/>
@@ -43,7 +43,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="statistics"
           options={{
-            title: 'Statistics',
+            title: 'Statystyki',
             headerShown:false,
             tabBarIcon: ({ color, focused }) => (
               <Ionicons name="stats-chart-outline" size={24} color={color} />

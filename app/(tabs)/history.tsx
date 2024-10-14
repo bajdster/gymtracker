@@ -18,10 +18,23 @@ const History = () => {
   }
 
   const [allTrainings, setAllTrainings] = useState<Training[]>([]);
+  const [isLoading, setIsLoading]= useState<Boolean>(true)
 
   const getAllTrainings = async () => {
+    setIsLoading(true)
     const response = await fetchAllTrainings();
-    setAllTrainings(response);
+    
+    if (response) {
+      const sorted: Training[] = response.sort((a, b) => {
+        const dateA = new Date(a.date.split('.').reverse().join('-'));
+        const dateB = new Date(b.date.split('.').reverse().join('-'));
+        return dateB.getTime() - dateA.getTime();
+      });
+      setAllTrainings(sorted);
+    } else {
+      setAllTrainings([]);
+    }
+    setIsLoading(false)
   };
 
   useEffect(() => {
@@ -51,10 +64,19 @@ const History = () => {
 </Collapsible>
   );
 
+  if (isLoading) {
+    return <Text style={{ color: 'white', fontSize:22 }}>Ładowanie...</Text>; 
+  }
+
+  if(!allTrainings)
+  {
+    return (<Text style={{color:'white'}}>Nie dodano żadnego treningu</Text>)
+  }
+
   return (
     <View style={styles.homeMainBox}>
       <View style={styles.homePageSection}>
-        <Text style={styles.sectionTitle}>History</Text>
+        <Text style={styles.sectionTitle}>Historia treningów</Text>
       </View>
       <FlatList
         data={allTrainings}

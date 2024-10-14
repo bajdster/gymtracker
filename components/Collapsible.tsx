@@ -10,7 +10,7 @@ export function Collapsible({ children, title, type, selectedExcercise }: PropsW
 
   const getTrainingText = (type: string) => {
     const training = trainings.find(training => training.trainingType === type);
-    return training ? training.text : 'Nieznany typ treningu';
+    return training ? training.text : title;
   };
 
   return (
@@ -24,8 +24,11 @@ export function Collapsible({ children, title, type, selectedExcercise }: PropsW
           size={18}
           color={theme === 'light' ? Colors.light.icon : Colors.dark.icon}
         />
-        <Text style={{ color: 'white', fontWeight: 'bold' }}>{title}</Text>
+        {(!type && !selectedExcercise) && <Text style={{ color: 'white', fontWeight: 'bold' }}>{getTrainingText(title)}</Text>}
+        
+        {type && <Text style={{ color: 'white', fontWeight: 'bold' }}>{title}</Text>}
         {type && selectedExcercise && (
+          //combination with types ^ because of using collapsible defferent in history and historyShort
           <View style={{ borderWidth: 1, borderColor: 'white', padding: 4, width: '70%', marginBottom: 10, borderRadius: 4 }}>
             <Text style={{ color: 'white', fontWeight: 'bold' }}>{getTrainingText(type)}</Text>
             <Text style={{ color: 'white' }}>{selectedExcercise}</Text>
