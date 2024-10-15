@@ -39,5 +39,8 @@ const styles = StyleSheet.create({
 
 //implement deleting trenings from history tab
 //maybe create store for statistics ?
-//modal when training is added?
+//modal when training is added - success? OK
 // create separate file with types to implement DRY 
+//osobna tab z pomiarami ciała
+//dodać ikonki ćwiczeń (dłuśza z powodu przekształcenia całego pliku Excercises.ts)
+//dostosowac statystyki do wybranego przedziału dni/miesiecy/lat

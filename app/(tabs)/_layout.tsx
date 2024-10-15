@@ -6,6 +6,7 @@ import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import Entypo from '@expo/vector-icons/Entypo';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -37,6 +38,16 @@ export default function TabLayout() {
               headerShown:false,
               tabBarIcon: ({ color, focused }) => (
                 <FontAwesome name="history" size={24} color={color}/>
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name="measurement"
+            options={{
+              title: 'Pomiary',
+              headerShown:false,
+              tabBarIcon: ({ color, focused }) => (
+                <Entypo name="ruler" size={24} color={color} />
               ),
             }}
           />

@@ -1,6 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, {useState, useEffect} from 'react'
+import { StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { fetchAllTrainings } from '@/lib/trainingManagement';
+import { LineChart } from 'react-native-chart-kit';
+import { Dimensions } from 'react-native';
 
 const Statistics = () => {
   interface RepsState {
@@ -15,15 +17,42 @@ const Statistics = () => {
     selectedExercise: string;
     trainingType: string;
   }
-  
+
   const [allTrainings, setAllTrainings] = useState<Training[]>([]);
-  const [sortedByType, setSortedByType] = useState<any>([])
-  const [isLoading, setIsLoading]= useState<Boolean>(true)
+  const [sortedByType, setSortedByType] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState<Boolean>(true);
+  const screenWidth = Dimensions.get('window').width;
+
+  const trainingTypes = ['chest', 'back', 'shoulder', 'legs', 'biceps', 'triceps', 'abs', 'pullups', 'running'];
+
+  const isDataLoaded =
+    sortedByType &&
+    sortedByType.chest &&
+    sortedByType.back &&
+    sortedByType.shoulder &&
+    sortedByType.legs &&
+    sortedByType.biceps &&
+    sortedByType.triceps &&
+    sortedByType.abs &&
+    sortedByType.pullups &&
+    sortedByType.running;
+
+  const data = isDataLoaded
+    ? {
+        labels: trainingTypes,
+        datasets: [
+          {
+            data: trainingTypes.map((type) => sortedByType[type]?.length || 0),
+          },
+        ],
+        legend: ['Dni treningowe'],
+      }
+    : null;
 
   const getAllTrainings = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     const response = await fetchAllTrainings();
-    
+
     if (response) {
       const sorted: Training[] = response.sort((a, b) => {
         const dateA = new Date(a.date.split('.').reverse().join('-'));
@@ -34,7 +63,7 @@ const Statistics = () => {
     } else {
       setAllTrainings([]);
     }
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -42,38 +71,33 @@ const Statistics = () => {
     console.log(allTrainings);
   }, []);
 
+  const getSortedTrainingsByType = () => {
+    const sortedByType: any = {};
+    trainingTypes.forEach((type) => {
+      sortedByType[type] = allTrainings.filter((training) => training.trainingType === type);
+    });
+
+    return sortedByType;
+  };
+
   const lastDaysTrainings = (days: number) => {
     const today = new Date();
     const pastDate = new Date(today);
     pastDate.setDate(today.getDate() - days);
-  
-    const allTrainingsArray = Object.values(allTrainings);
-  
-    const filteredTrainings = allTrainingsArray.filter((training) => {
-      const trainingDate = new Date(training.date);
+
+    const filteredTrainings = allTrainings.filter((training) => {
+      const trainingDate = new Date(training.date.split('.').reverse().join('-'));
       return trainingDate >= pastDate;
     });
-  
+
     return filteredTrainings;
   };
 
-  const trainingTypes = ['chest', 'back', 'shoulder', 'legs', 'biceps', 'triceps', 'abs', 'pullups', 'running'];
-
-  const getSortedTrainingsByType = () => {
-    const sortedByType: any = {};
-
-    trainingTypes.forEach((type) => {
-      sortedByType[type] = allTrainings.filter((training) => training.trainingType === type);
-    });
-  
-    return sortedByType;
-  }
-  
   useEffect(() => {
     if (allTrainings.length > 0) {
       const groupedTrainings = getSortedTrainingsByType();
       setSortedByType(groupedTrainings);
-      console.log(groupedTrainings); 
+      console.log(groupedTrainings);
     }
   }, [allTrainings]);
 
@@ -83,53 +107,52 @@ const Statistics = () => {
         <Text style={styles.sectionTitle}>Statystyki</Text>
       </View>
       <View>
-        <Text style={{color:'white'}}>Wszystkie dodane treningi: {allTrainings.length}</Text>
-        <Text style={{color:'white'}}>Odbyte treningi w ciągu ostatnich 7 dni: {lastDaysTrainings(7).length}</Text>
-        <Text style={{color:'white'}}>Odbyte treningi w ciągu ostatnich 14 dni: {lastDaysTrainings(14).length}</Text>
+        <Text style={{ color: 'white' }}>Wszystkie dodane treningi: {allTrainings && allTrainings.length}</Text>
+        <Text style={{ color: 'white' }}>Treningi z ostatnich 7 dni: {lastDaysTrainings(7).length}</Text>
+        <Text style={{ color: 'white' }}>Treningi z ostatnich 14 dni: {lastDaysTrainings(14).length}</Text>
+
         <View style={styles.trainingsStats}>
-          <View style={styles.tableCell}>
-            <Text style={{color:'white'}}>Klatka</Text>
-            <Text style={{color:'white'}}>{sortedByType.chest.length}</Text>
-          </View>
-          <View style={styles.tableCell}>
-            <Text style={{color:'white'}}>Plecy </Text>
-            <Text style={{color:'white'}}>{sortedByType.back.length}</Text>
-          </View>
-          <View style={styles.tableCell}>
-            <Text style={{color:'white'}}>Barki</Text>
-            <Text style={{color:'white'}}>{sortedByType.shoulder.length}</Text>
-          </View>
-          <View style={styles.tableCell}>
-            <Text style={{color:'white'}}>Triceps</Text>
-            <Text style={{color:'white'}}>{sortedByType.triceps.length}</Text>
-          </View>
-          <View style={styles.tableCell}>
-            <Text style={{color:'white'}}>Nogi</Text>
-            <Text style={{color:'white'}}>{sortedByType.legs.length}</Text>
-          </View>
-          <View style={styles.tableCell}>
-            <Text style={{color:'white'}}>Biceps</Text>
-            <Text style={{color:'white'}}>{sortedByType.biceps.length}</Text>
-          </View>
-          <View style={styles.tableCell}>
-            <Text style={{color:'white'}}>Brzuch</Text>
-            <Text style={{color:'white'}}>{sortedByType.abs.length}</Text>
-          </View>
-          <View style={styles.tableCell}>
-            <Text style={{color:'white'}}>Drążek</Text>
-            <Text style={{color:'white'}}>{sortedByType.pullups.length}</Text>
-          </View>
-          <View style={styles.tableCell}>
-            <Text style={{color:'white'}}>Bieganie</Text>
-            <Text style={{color:'white'}}>{sortedByType.running.length}</Text>
-          </View>
+          {trainingTypes.map((type) => (
+            <View key={type} style={styles.tableCell}>
+              <Text style={{ color: 'white' }}>{type.charAt(0).toUpperCase() + type.slice(1)}</Text>
+              <Text style={{ color: 'white' }}>{sortedByType[type] ? sortedByType[type].length : 0}</Text>
+            </View>
+          ))}
+        </View>
+
+        {/* Sprawdzenie, czy dane są załadowane */}
+        <View style={{justifyContent:'center', alignItems:'center', marginTop:20}}>
+        {data ? (
+          <LineChart
+            data={data}
+            width={screenWidth * 0.93}
+            height={220}
+            fromZero={true}
+            yAxisInterval={1}
+            chartConfig={{
+              backgroundColor: '#cbf078',
+              backgroundGradientFrom: '#cbf078',
+              backgroundGradientTo: '#a2c11c',
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              strokeWidth: 2,
+              decimalPlaces: 0,
+              propsForLabels: {
+                fontSize: 10,  
+                fill: '#ffffff', 
+                fontWeight:'bold'
+              },
+            }}
+          />
+        ) : (
+          <Text style={{ color: 'white' }}>Ładowanie danych...</Text>
+        )}
         </View>
       </View>
     </View>
   );
-}
+};
 
-export default Statistics
+export default Statistics;
 
 const styles = StyleSheet.create({
   homeMainBox: {
@@ -147,31 +170,20 @@ const styles = StyleSheet.create({
     padding: 4,
     marginBottom: 10,
   },
-  textStyle: {
-    color: 'white',
-    fontSize: 16,
+  trainingsStats: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
   },
-  trainingDetails:{
-    backgroundColor:'#393e46',
-    padding:4,
-    borderRadius:4,
-    width:'90%',
-    marginBottom:4
+  tableCell: {
+    width: '33%',
+    padding: 4,
+    borderRadius: 2,
+    borderWidth: 1,
+    borderColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  trainingsStats:{
-    flexDirection:'row',
-    flexWrap:'wrap',
-    justifyContent:'center',
-    alignItems:'center',
-    marginTop:20
-  },
-  tableCell:{
-    width:"33%",
-    padding:4,
-    borderRadius:2,
-    borderWidth:1,
-    borderColor:'white',
-    justifyContent:'center',
-    alignItems:'center'
-  }
-})
+});

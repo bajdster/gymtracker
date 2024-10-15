@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Button, TouchableOpacity, Modal } from 'react-native'
 import React, {useEffect, useState} from 'react'
 import { router, useLocalSearchParams } from 'expo-router'
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -33,6 +33,8 @@ const TrainingDetails = () => {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -50,17 +52,23 @@ const TrainingDetails = () => {
 }, [date])
 
 const sendTraining = async ({ trainingType, repsState, selectedExercise }: TrainingDetails): Promise<void> => {
-  
-  // Formatowanie daty w formacie YYYY-MM-DD
   const formattedDate = date.toISOString().split('T')[0];
   
-  await sendTrainingToDB({
-    date: formattedDate, 
-    trainingType,
-    repsState,
-    selectedExercise,
-  });
-  router.push("/")
+  try {
+    await sendTrainingToDB({
+      date: formattedDate, 
+      trainingType,
+      repsState,
+      selectedExercise,
+    });
+    // Ustaw wiadomość i pokaż modal
+    setModalMessage('Trening dodany pomyślnie!');
+    setModalVisible(true);
+  } catch (error) {
+    // Ustaw wiadomość o błędzie, jeśli potrzebne
+    setModalMessage('Wystąpił błąd podczas dodawania treningu.');
+    setModalVisible(true);
+  }
 };
 
 
@@ -93,7 +101,33 @@ const sendTraining = async ({ trainingType, repsState, selectedExercise }: Train
           onChange={onChange}
         />
       )}
+
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={modalVisible}
+      onRequestClose={() => {
+        setModalVisible(false);
+        router.push("/");
+      }}>
+      <View style={styles.modalContainer}>
+        <View style={styles.modalContent}>
+          <Text style={styles.modalMessage}>{modalMessage}</Text>
+          <TouchableOpacity
+            style={styles.modalButton}
+            onPress={() => {
+              setModalVisible(false);
+              router.push("/"); 
+            }}>
+            <Text style={styles.modalButtonText}>OK</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+
     </View>
+
+    
   )
 }
 
@@ -138,5 +172,32 @@ const styles = StyleSheet.create({
       borderRadius:10,
       borderBottomColor:'white',
       borderWidth:1,
-    }
+    },
+    modalContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+      width: 300,
+      padding: 20,
+      backgroundColor: 'white',
+      borderRadius: 10,
+      alignItems: 'center',
+    },
+    modalMessage: {
+      marginBottom: 20,
+      fontSize: 18,
+      textAlign: 'center',
+    },
+    modalButton: {
+      backgroundColor: '#cbf078',
+      padding: 10,
+      borderRadius: 5,
+    },
+    modalButtonText: {
+      color: 'white',
+      fontSize: 16,
+    },
 })
