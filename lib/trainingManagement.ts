@@ -73,6 +73,33 @@ export async function fetchAllTrainings()
   }
 }
 
+//need to adjust this to data from Measurement Component
+export async function sendMeasurementToDB(measurementData:trainingDetails)
+{
+    try
+    {
+        const response = await fetch("https://gymtracker-c5f99-default-rtdb.firebaseio.com/measurement.json", {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(measurementData),
+          });
+
+          if (response.ok) {
+            const responseData = await response.json();
+            console.log("Pomiary zostały zapisane z ID: ", responseData.name); 
+          } else {
+            console.error("Błąd podczas zapisywania pomiarów:", response.status);
+          }
+    }
+    catch(error)
+    {
+        console.error("Wystąpił błąd:", error);
+    }
+
+}
+
 // Firebase Realtime Database obsługuje podstawowe filtrowanie danych przy użyciu zapytań z metodami takimi jak orderBy, equalTo, startAt, endAt oraz limitToFirst i limitToLast.
 
 // const fetchTrainingsByType = async (trainingType: string): Promise<void> => {
