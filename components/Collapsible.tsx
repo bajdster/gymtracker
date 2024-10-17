@@ -29,7 +29,7 @@ export function Collapsible({ children, title, type, selectedExcercise }: PropsW
         {type && <Text style={{ color: 'white', fontWeight: 'bold' }}>{title}</Text>}
         {type && selectedExcercise && (
           //combination with types ^ because of using collapsible defferent in history and historyShort
-          <View style={{ borderWidth: 1, borderColor: 'white', padding: 4, width: '70%', marginBottom: 10, borderRadius: 4 }}>
+          <View style={{ padding: 4, width: '70%', marginBottom: 10, borderRadius: 4 }}>
             <Text style={{ color: 'white', fontWeight: 'bold' }}>{getTrainingText(type)}</Text>
             <Text style={{ color: 'white' }}>{selectedExcercise}</Text>
           </View>
@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
+    
   },
   content: {
     marginLeft: 24,

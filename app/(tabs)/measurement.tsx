@@ -1,4 +1,4 @@
-import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import exercises from '@/constants/Excercises';
 import { Picker } from '@react-native-picker/picker';
@@ -7,6 +7,7 @@ import AddTrainingButton from '@/components/addTrainingButton';
 import { sendMeasurementToDB } from '@/lib/trainingManagement';
 import { fetchAllMeasurements } from '@/lib/trainingManagement';
 import measurementNames from "../../constants/Measurements"
+import { Collapsible } from '@/components/Collapsible';
 
 const Measurement: React.FC = () => {
 
@@ -21,7 +22,9 @@ const Measurement: React.FC = () => {
     forearm: ''
   });
 
+  const [allMeasures, setAllMeasures] = useState<MeasurementProps>([])
   const [fetchedMeasurement, setFetchedMeasurement] = useState<MeasurementProps[]>([]);
+  const [isLoading, setIsLoading] = useState<Boolean>(true)
 
   const handleInputChange = (type: string, value: string) => {
     setMeasurement((prev) => {
@@ -39,20 +42,23 @@ const Measurement: React.FC = () => {
     return Math.round(BMI);
   }
 
+  const getAllMeasurements = async () => {
+    setIsLoading(true)
+    const response = await fetchAllMeasurements();
+
+    // Ustawienie stanu na najnowszy pomiar
+    if (response.length > 0) {
+      setAllMeasures(response)
+      setFetchedMeasurement(response[response.length -1]);
+    }
+    setIsLoading(false)
+  };
+
   useEffect(() => {
-    const getAllMeasurements = async () => {
-      const response = await fetchAllMeasurements();
-  
-      // Ustawienie stanu na najnowszy pomiar
-      if (response.length > 0) {
-        setFetchedMeasurement(response[response.length -1]);
-      }
-    };
-  
     getAllMeasurements();
   }, []);
 
-  console.log(fetchedMeasurement)
+  console.log(allMeasures)
 
   const getBMIBarStyle = () => {
     const bmi = checkBMI();
@@ -86,10 +92,16 @@ const Measurement: React.FC = () => {
       bmi: checkBMI(),
     };
     await sendMeasurementToDB(data);
+    await getAllMeasurements()
   };
 
   const fillInputsWithLatestMeasurements = () => {
     setMeasurement(fetchedMeasurement);
+  }
+
+  if(isLoading)
+  {
+    return <Text style={{ color: 'white', fontSize:22 }}>Ładowanie...</Text>
   }
 
   return (
@@ -108,7 +120,7 @@ const Measurement: React.FC = () => {
           </View>
 
             <View>
-              <Text style={styles.measureLabel}>Ostatnie pomiary {fetchedMeasurement.date}</Text>
+              <Text style={styles.measureLabel}>Ostatni pomiar {fetchedMeasurement.date}</Text>
               <View style={styles.measurementsStats}>
                 {Object.keys(fetchedMeasurement)
                   .filter((key) => key !== 'id' && key !== 'date')
@@ -227,7 +239,33 @@ const Measurement: React.FC = () => {
             </View>
           </View>
           <AddTrainingButton onAddTraining={sendMeasurement} />
+
+          <View>
+            <Text style={styles.measureLabel}>Wcześniejsze pomiary</Text>
+
+          </View>
         </View>
+
+            
+        {allMeasures.map((measure, measureIndex) => {
+          return (
+            <Collapsible title={measure.date} key={`${measure.id}-${measureIndex}`}>
+              <View style={{flexDirection:'row', flexWrap:'wrap'}}>
+              {Object.keys(measure)
+                .filter((key) => key !== 'id' && key !== 'date')
+                .map((key) => (
+                  <View key={`${measure.id}-${key}`} style={styles.tableCell}>
+                    <Text style={{ color: 'white' }}>{measurementNames(key)}</Text>
+                    <Text style={{ color: 'white' }}>{measure[key]}</Text>
+                  </View>
+              ))}
+              </View>
+            </Collapsible>
+          );
+        })}
+          
+
+
       </ScrollView>
     </KeyboardAvoidingView>
   );

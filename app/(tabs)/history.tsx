@@ -43,6 +43,7 @@ const History = () => {
   }, []);
 
   const renderItem = ({ item }: { item: Training }) => (
+    <View style={{backgroundColor:'#222831', borderColor:'white', borderWidth:1}}>
 <Collapsible title={item.date} type={item.trainingType} selectedExcercise={item.selectedExercise}>
   {item.repsState.map((rep, index) => (
     <View key={index} style={styles.trainingDetails}>
@@ -62,6 +63,7 @@ const History = () => {
     </View>
   ))}
 </Collapsible>
+</View>
   );
 
   if (isLoading) {
