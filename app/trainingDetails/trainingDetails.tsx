@@ -156,7 +156,8 @@ const styles = StyleSheet.create({
       borderWidth:1,
       borderColor:'gray',
       borderRadius:10,
-      padding:12
+      padding:12,
+      backgroundColor:'#222831'
     },
     calendarButton:{
       backgroundColor:'#cbf078', 

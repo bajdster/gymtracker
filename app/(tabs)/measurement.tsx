@@ -48,8 +48,9 @@ const Measurement: React.FC = () => {
 
     // Ustawienie stanu na najnowszy pomiar
     if (response.length > 0) {
-      setAllMeasures(response)
-      setFetchedMeasurement(response[response.length -1]);
+      const reversedResponse = response.reverse()
+      setAllMeasures(reversedResponse)
+      setFetchedMeasurement(reversedResponse[0]);
     }
     setIsLoading(false)
   };
@@ -115,7 +116,7 @@ const Measurement: React.FC = () => {
           <View style={[styles.homePageSection, {flexDirection:'row', justifyContent:'space-between'}]}>
             <Text style={styles.sectionTitle}>Pomiary</Text>
             <TouchableOpacity onPress={fillInputsWithLatestMeasurements} style={{borderWidth:1, borderColor:'#cbf078', borderRadius:4}}>
-              <Text style={styles.loadButton}>Wczytaj ostatnie pomiary</Text>
+              <Text style={styles.loadButton}>Wczytaj ostatni pomiar</Text>
             </TouchableOpacity>
           </View>
 
@@ -159,21 +160,21 @@ const Measurement: React.FC = () => {
             <View style={getBMIBarStyle()} />
           </View>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: '100%', justifyContent: 'space-between' }}>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'row' , alignItems:'center', justifyContent:'center'}}>
               <View style={[styles.BMICircle, { backgroundColor: 'blue' }]}></View>
-              <Text style={styles.inputLabel}>Niedowaga</Text>
+              <Text style={styles.bmiLabel}>Niedowaga</Text>
             </View>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'row', alignItems:'center', justifyContent:'center' }}>
               <View style={[styles.BMICircle, { backgroundColor: 'green' }]}></View>
-              <Text style={styles.inputLabel}>Waga prawidłowa</Text>
+              <Text style={styles.bmiLabel}>Waga prawidłowa</Text>
             </View>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'row', alignItems:'center', justifyContent:'center' }}>
               <View style={[styles.BMICircle, { backgroundColor: 'yellow' }]}></View>
-              <Text style={styles.inputLabel}>Nadwaga</Text>
+              <Text style={styles.bmiLabel}>Nadwaga</Text>
             </View>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'row', alignItems:'center', justifyContent:'center' }}>
               <View style={[styles.BMICircle, { backgroundColor: 'red' }]}></View>
-              <Text style={styles.inputLabel}>Otyłość</Text>
+              <Text style={styles.bmiLabel}>Otyłość</Text>
             </View>
           </View>
           <Text style={styles.measureLabel}>Pomiary ciała (obwód cm)</Text>
@@ -313,6 +314,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginRight: 10,
   },
+  bmiLabel: {
+    color: 'white',
+    marginBottom: 6,
+    marginTop: 10,
+    marginRight: 10,
+    fontSize:12
+  },
   measureLabel: {
     color: 'white',
     justifyContent: 'center',
@@ -326,11 +334,10 @@ const styles = StyleSheet.create({
     fontSize: 12
   },
   BMICircle: {
-    width: 20,
-    height: 20,
+    width: 10,
+    height: 10,
     borderRadius: 10,
-    marginTop: 10,
-    marginRight: 4
+    marginRight: 4,
   },
   scrollContainer: {
     paddingBottom: 20,
@@ -350,5 +357,6 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor:'#222831'
   },
 });

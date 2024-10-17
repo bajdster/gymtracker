@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { fetchAllTrainings } from '@/lib/trainingManagement';
 import { LineChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
+import { getTrainingsNames } from '@/constants/Excercises';
 
 const Statistics = () => {
   interface RepsState {
@@ -114,7 +115,7 @@ const Statistics = () => {
         <View style={styles.trainingsStats}>
           {trainingTypes.map((type) => (
             <View key={type} style={styles.tableCell}>
-              <Text style={{ color: 'white' }}>{type.charAt(0).toUpperCase() + type.slice(1)}</Text>
+              <Text style={{ color: 'white' }}>{getTrainingsNames(type)}</Text>
               <Text style={{ color: 'white' }}>{sortedByType[type] ? sortedByType[type].length : 0}</Text>
             </View>
           ))}
@@ -131,7 +132,7 @@ const Statistics = () => {
             yAxisInterval={1}
             chartConfig={{
               backgroundColor: '#cbf078',
-              backgroundGradientFrom: '#cbf078',
+              backgroundGradientFrom: '#4c9173',
               backgroundGradientTo: '#a2c11c',
               color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               strokeWidth: 2,
@@ -185,5 +186,6 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor:'#222831'
   },
 });

@@ -116,6 +116,30 @@ const exercises:{} = {
         imageUrl: require("../assets/images/running.png")
       },
     ]
+
+    export function getTrainingsNames(engName:string)
+    {
+      switch(engName){
+        case "chest":
+            return "Klatka";
+        case "back":
+            return "Plecy";
+        case "shoulder":
+            return "Barki";
+        case "legs":
+            return "Nogi";
+        case "biceps":
+            return "Biceps";
+        case "triceps":
+            return "Triceps";
+        case "abs":
+            return "Brzuch";
+        case 'pullups':
+            return 'Drążek';
+        case "running":
+            return 'Bieganie';
+    }
+    }
   
   
   export default exercises;

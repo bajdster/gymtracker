@@ -8,7 +8,7 @@ export default function measurementNames(measure:string){
         case "forearm":
             return "Przedramię";
         case "height":
-            return "Wysokość";
+            return "Wzrost";
         case "hips":
             return "Biodra";
         case "thigh":

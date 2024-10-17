@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
 import { fetchAllTrainings } from '@/lib/trainingManagement';
 import { Collapsible } from '@/components/Collapsible'; // Importujemy Collapsible
 
@@ -19,6 +19,7 @@ const History = () => {
 
   const [allTrainings, setAllTrainings] = useState<Training[]>([]);
   const [isLoading, setIsLoading]= useState<Boolean>(true)
+  const [isDeleting, setIsDeleting] = useState<Boolean>(false)
 
   const getAllTrainings = async () => {
     setIsLoading(true)
@@ -42,8 +43,14 @@ const History = () => {
     console.log(allTrainings);
   }, []);
 
+  //implement deleting
+  function deleteTrainingHandler(id:string)
+  {
+    console.log("Deleting "+ id)
+  }
+
   const renderItem = ({ item }: { item: Training }) => (
-    <View style={{backgroundColor:'#222831', borderColor:'white', borderWidth:1}}>
+    <View style={{backgroundColor:'#222831', borderColor:'white', borderWidth:1, marginBottom:10}}>
 <Collapsible title={item.date} type={item.trainingType} selectedExcercise={item.selectedExercise}>
   {item.repsState.map((rep, index) => (
     <View key={index} style={styles.trainingDetails}>
@@ -62,6 +69,9 @@ const History = () => {
       )}
     </View>
   ))}
+    <TouchableOpacity style={{padding:20}} onPress={()=> deleteTrainingHandler(item.id)}>
+      <Text style={{color:'red', position:'absolute', right:10, bottom:10}}>Usuń trening</Text>
+    </TouchableOpacity>
 </Collapsible>
 </View>
   );

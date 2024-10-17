@@ -136,7 +136,8 @@ const styles = StyleSheet.create({
     alignItems:'center',
     borderWidth:1,
     borderColor:'white',
-    paddingVertical: 4
+    paddingVertical: 4,
+    backgroundColor:'#222831'
   },
   excerciseAmountInputsContainer: {
     marginTop: 10,

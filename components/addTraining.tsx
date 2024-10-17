@@ -11,6 +11,8 @@ import { trainings } from '@/constants/Excercises'
     router.push({pathname: "/trainingDetails/trainingDetails", params: {type: trainingType}})
   }
 
+const iconColors = ["#5585b5","#9fd3c7","#f95959","#347474","#6643b5","#f8f398","#a7bcb9","#fdc57b","#4c9173",]
+
   const AddTraining = () => {
 
   
@@ -18,14 +20,17 @@ import { trainings } from '@/constants/Excercises'
     <View>
       <Text style={styles.sectionTitle}>Dodaj trening</Text>
         <View style={styles.trainingIcons}>
-          {trainings.map((training)=>
+          {trainings.map((training, index)=>
           {
-            return (<TouchableOpacity style={styles.trainingButton} onPress={()=> {addTrainingHandler(training.trainingType)}} key={training.text}>
+            return (
+            <View style={{width:'30%', justifyContent:'center', alignItems:'center'}}>
+            <TouchableOpacity style={styles.trainingButton} onPress={()=> {addTrainingHandler(training.trainingType)}} key={training.text}>
             <View style={styles.training}>
-                <Image source={training.imageUrl} style={styles.trainingImage}/>
-                <Text style={styles.trainingIconText}>{training.text}</Text> 
+                <Image source={training.imageUrl} style={[styles.trainingImage, {tintColor:iconColors[index]}]}/>
             </View>
-          </TouchableOpacity>)
+            </TouchableOpacity>
+              <Text style={styles.trainingIconText}>{training.text}</Text> 
+          </View>)
           })}
     </View>
     </View>
@@ -52,10 +57,13 @@ const styles = StyleSheet.create({
         alignItems:'center'
       },
       trainingButton:{
-        width: '30%',
+        width: 65,
+        height:65,
         justifyContent:'center',
         alignItems:'center',
-        marginBottom:10
+        marginBottom:10,
+        backgroundColor:'#222831',
+        borderRadius:50
       },
       sectionTitle:{
         color:'white',
@@ -65,9 +73,8 @@ const styles = StyleSheet.create({
         marginBottom:2
     },
     trainingImage:{
-        width:50,
-        height:50,
-        tintColor:'#cbf078',
+        width:40,
+        height:40,
     }
   
 })
