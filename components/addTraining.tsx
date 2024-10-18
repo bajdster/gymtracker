@@ -23,7 +23,7 @@ const iconColors = ["#5585b5","#9fd3c7","#f95959","#347474","#6643b5","#f8f398",
           {trainings.map((training, index)=>
           {
             return (
-            <View style={{width:'30%', justifyContent:'center', alignItems:'center'}}>
+            <View style={{width:'30%', justifyContent:'center', alignItems:'center'}} key={index}>
             <TouchableOpacity style={styles.trainingButton} onPress={()=> {addTrainingHandler(training.trainingType)}} key={training.text}>
             <View style={styles.training}>
                 <Image source={training.imageUrl} style={[styles.trainingImage, {tintColor:iconColors[index]}]}/>

@@ -121,9 +121,9 @@ const Measurement: React.FC = () => {
           </View>
 
             <View>
-              <Text style={styles.measureLabel}>Ostatni pomiar {fetchedMeasurement.date}</Text>
+              <Text style={styles.measureLabel}>Ostatni pomiar {fetchedMeasurement && fetchedMeasurement.date}</Text>
               <View style={styles.measurementsStats}>
-                {Object.keys(fetchedMeasurement)
+                {fetchedMeasurement && Object.keys(fetchedMeasurement)
                   .filter((key) => key !== 'id' && key !== 'date')
                   .map((key) => (
                     <View key={key} style={styles.tableCell}>
@@ -248,7 +248,7 @@ const Measurement: React.FC = () => {
         </View>
 
             
-        {allMeasures.map((measure, measureIndex) => {
+        {allMeasures && allMeasures.map((measure, measureIndex) => {
           return (
             <Collapsible title={measure.date} key={`${measure.id}-${measureIndex}`}>
               <View style={{flexDirection:'row', flexWrap:'wrap'}}>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
-import { fetchAllTrainings } from '@/lib/trainingManagement';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Modal } from 'react-native';
+import { deleteTrainingFromDB, fetchAllTrainings } from '@/lib/trainingManagement';
 import { Collapsible } from '@/components/Collapsible'; // Importujemy Collapsible
 
 const History = () => {
@@ -18,11 +18,15 @@ const History = () => {
   }
 
   const [allTrainings, setAllTrainings] = useState<Training[]>([]);
-  const [isLoading, setIsLoading]= useState<Boolean>(true)
-  const [isDeleting, setIsDeleting] = useState<Boolean>(false)
+  
+  const [isLoading, setIsLoading] = useState<Boolean>(true);
+  const [isDeleting, setIsDeleting] = useState<Boolean>(false);
+  const [modalVisible, setModalVisible] = useState<Boolean>(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [selectedTrainingId, setSelectedTrainingId] = useState<string | null>(null);
 
   const getAllTrainings = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     const response = await fetchAllTrainings();
     
     if (response) {
@@ -35,7 +39,7 @@ const History = () => {
     } else {
       setAllTrainings([]);
     }
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -43,46 +47,57 @@ const History = () => {
     console.log(allTrainings);
   }, []);
 
-  //implement deleting
-  function deleteTrainingHandler(id:string)
-  {
-    console.log("Deleting "+ id)
-  }
+
+  const confirmDeleteHandler = (id: string) => {
+    setSelectedTrainingId(id); 
+    setModalMessage('Czy na pewno chcesz usunąć ten trening?');
+    setModalVisible(true); 
+  };
+
+  const handleDeleteConfirmation = async () => {
+    if (selectedTrainingId) {
+      setIsDeleting(true);
+      setModalVisible(false); 
+      await deleteTrainingFromDB(selectedTrainingId); 
+      await getAllTrainings();
+      setIsDeleting(false);
+    }
+  };
 
   const renderItem = ({ item }: { item: Training }) => (
     <View style={{backgroundColor:'#222831', borderColor:'white', borderWidth:1, marginBottom:10}}>
-<Collapsible title={item.date} type={item.trainingType} selectedExcercise={item.selectedExercise}>
-  {item.repsState.map((rep, index) => (
-    <View key={index} style={styles.trainingDetails}>
-      {item.trainingType === 'running' && (
-        <Text style={styles.textStyle}>Bieg {index + 1} - Czas: {rep.reps}</Text>
-      )}
+      <Collapsible title={item.date} type={item.trainingType} selectedExcercise={item.selectedExercise}>
+        {item.repsState.map((rep, index) => (
+          <View key={index} style={styles.trainingDetails}>
+            {item.trainingType === 'running' && (
+              <Text style={styles.textStyle}>Bieg {index + 1} - Czas: {rep.reps}</Text>
+            )}
 
-      {(item.trainingType === 'pullups' || item.trainingType === 'abs') && (
-        <Text style={styles.textStyle}>Seria {index + 1} - Ilość powtórzeń: {rep.reps}</Text>
-      )}
+            {(item.trainingType === 'pullups' || item.trainingType === 'abs') && (
+              <Text style={styles.textStyle}>Seria {index + 1} - Ilość powtórzeń: {rep.reps}</Text>
+            )}
 
-      {item.trainingType !== 'running' && item.trainingType !== 'abs' && item.trainingType !== 'pullups' && (
-        <Text style={styles.textStyle}>
-          Seria {index + 1} - Ilość powtórzeń: {rep.reps}, Ciężar: {rep.weight} kg
-        </Text>
-      )}
+            {item.trainingType !== 'running' && item.trainingType !== 'abs' && item.trainingType !== 'pullups' && (
+              <Text style={styles.textStyle}>
+                Seria {index + 1} - Ilość powtórzeń: {rep.reps}, Ciężar: {rep.weight} kg
+              </Text>
+            )}
+          </View>
+        ))}
+          <TouchableOpacity style={{ padding: 20 }} onPress={() => confirmDeleteHandler(item.id)} disabled={isDeleting}>
+            <Text style={{ color: 'red', position: 'absolute', right: 10, bottom: 10 }}>
+              {isDeleting ? 'Usuwanie...' : 'Usuń trening'}
+            </Text>
+          </TouchableOpacity>
+      </Collapsible>
     </View>
-  ))}
-    <TouchableOpacity style={{padding:20}} onPress={()=> deleteTrainingHandler(item.id)}>
-      <Text style={{color:'red', position:'absolute', right:10, bottom:10}}>Usuń trening</Text>
-    </TouchableOpacity>
-</Collapsible>
-</View>
   );
 
-  if (isLoading) {
-    return <Text style={{ color: 'white', fontSize:22 }}>Ładowanie...</Text>; 
+  if (!allTrainings) {
+    return (<Text style={{color:'white'}}>Nie dodano żadnego treningu</Text>);
   }
-
-  if(!allTrainings)
-  {
-    return (<Text style={{color:'white'}}>Nie dodano żadnego treningu</Text>)
+  if (isLoading || isDeleting) {
+    return <Text style={{ color: 'white', fontSize: 22 }}>Ładowanie...</Text>;
   }
 
   return (
@@ -95,6 +110,33 @@ const History = () => {
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
       />
+
+      {/* Modal potwierdzający usunięcie */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(false);
+        }}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalMessage}>{modalMessage}</Text>
+            <View style={styles.modalButtonContainer}>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={handleDeleteConfirmation}>
+                <Text style={styles.modalButtonText}>Tak</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, {backgroundColor:'red'}]}
+                onPress={() => setModalVisible(false)}>
+                <Text style={[styles.modalButtonText]}>Nie</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -121,11 +163,44 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
   },
-  trainingDetails:{
-    backgroundColor:'#393e46',
-    padding:4,
-    borderRadius:4,
-    width:'90%',
-    marginBottom:4
+  trainingDetails: {
+    backgroundColor: '#393e46',
+    padding: 4,
+    borderRadius: 4,
+    width: '90%',
+    marginBottom: 4,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: 300,
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalMessage: {
+    marginBottom: 20,
+    fontSize: 18,
+    textAlign: 'center',
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  modalButton: {
+    backgroundColor: '#cbf078',
+    padding: 10,
+    borderRadius: 5,
+    marginHorizontal: 10,
+  },
+  modalButtonText: {
+    color: 'white',
+    fontSize: 16,
   },
 });
