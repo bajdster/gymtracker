@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Modal } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Modal, TextInput } from 'react-native';
 import { deleteTrainingFromDB, fetchAllTrainings } from '@/lib/trainingManagement';
 import { Collapsible } from '@/components/Collapsible'; // Importujemy Collapsible
 
@@ -18,6 +18,7 @@ const History = () => {
   }
 
   const [allTrainings, setAllTrainings] = useState<Training[]>([]);
+  const [filteredTrainings, setFilteredTrainings] = useState<Training[]>([]);
   
   const [isLoading, setIsLoading] = useState<Boolean>(true);
   const [isDeleting, setIsDeleting] = useState<Boolean>(false);
@@ -36,8 +37,10 @@ const History = () => {
         return dateB.getTime() - dateA.getTime();
       });
       setAllTrainings(sorted);
+      setFilteredTrainings(sorted); 
     } else {
       setAllTrainings([]);
+      setFilteredTrainings([]);
     }
     setIsLoading(false);
   };
@@ -61,6 +64,21 @@ const History = () => {
       await deleteTrainingFromDB(selectedTrainingId); 
       await getAllTrainings();
       setIsDeleting(false);
+    }
+  };
+
+  const handleInputChange = (value: string) => {
+    if (!value) {
+      setFilteredTrainings(allTrainings);
+    } else {
+      const filtered = allTrainings.filter(training => {
+        const dateMatch = training.date.includes(value);
+        const exerciseMatch = training.selectedExercise.toLowerCase().includes(value.toLowerCase());
+        const typeMatch = training.trainingType.toLowerCase().includes(value.toLowerCase());
+  
+        return dateMatch || exerciseMatch || typeMatch;
+      });
+      setFilteredTrainings(filtered); 
     }
   };
 
@@ -105,8 +123,11 @@ const History = () => {
       <View style={styles.homePageSection}>
         <Text style={styles.sectionTitle}>Historia treningów</Text>
       </View>
+      <View>
+        <TextInput style={styles.filterInput} placeholder='Wpisz rodzaj treningu, datę lub ćwiczenie' onChangeText={(value)=> handleInputChange(value)}/>
+      </View>
       <FlatList
-        data={allTrainings}
+        data={filteredTrainings}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
       />
@@ -203,4 +224,13 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
   },
+  filterInput:{
+    backgroundColor:'#e0ffcd',
+    marginBottom: 20,
+    height:50,
+    borderRadius:10,
+    padding:4,
+    color:'black',
+    fontSize:20
+  }
 });

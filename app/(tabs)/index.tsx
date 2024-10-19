@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
 })
 
 //maybe create store for statistics ? 
-//modal when measurement is added?
 // create separate file with types to implement DRY 
 //dodać ikonki ćwiczeń (dłuśza z powodu przekształcenia całego pliku Excercises.ts)
 //dostosowac statystyki do wybranego przedziału dni/miesiecy/lat
