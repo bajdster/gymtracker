@@ -27,8 +27,6 @@ const HistoryShort: React.FC = () => {
       const response = await fetchHistoryShortTrainings()
       const data = await response.json();
 
-      console.log("Received data from Firebase:", data);
-
       if (typeof data === 'object' && data !== null) {
         const trainingsArray: Training[] = Object.keys(data).map((key) => ({
           id: key,

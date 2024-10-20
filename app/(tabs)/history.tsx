@@ -47,7 +47,7 @@ const History = () => {
 
   useEffect(() => {
     getAllTrainings();
-    console.log(allTrainings);
+
   }, []);
 
 
@@ -67,6 +67,7 @@ const History = () => {
     }
   };
 
+  //filtrowanie po type bierze po angielskiej nazwie np chest a nie klatka
   const handleInputChange = (value: string) => {
     if (!value) {
       setFilteredTrainings(allTrainings);
@@ -124,7 +125,7 @@ const History = () => {
         <Text style={styles.sectionTitle}>Historia treningów</Text>
       </View>
       <View>
-        <TextInput style={styles.filterInput} placeholder='Wpisz rodzaj treningu, datę lub ćwiczenie' onChangeText={(value)=> handleInputChange(value)}/>
+        <TextInput style={styles.filterInput} placeholder='Wpisz datę lub ćwiczenie' onChangeText={(value)=> handleInputChange(value)}/>
       </View>
       <FlatList
         data={filteredTrainings}

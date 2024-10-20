@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { fetchAllTrainings } from '@/lib/trainingManagement';
+import { fetchAllMeasurements, fetchAllTrainings } from '@/lib/trainingManagement';
 import { LineChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
 import { getTrainingsNames } from '@/constants/Excercises';
+import { Picker } from '@react-native-picker/picker';
 
 const Statistics = () => {
   interface RepsState {
@@ -19,24 +20,27 @@ const Statistics = () => {
     trainingType: string;
   }
 
+  interface Measurement {
+    date: string;
+    weight: number;
+    chest: number;
+    waist: number;
+    hips: number;
+    // Dodaj inne parametry pomiarów według potrzeb
+  }
+
   const [allTrainings, setAllTrainings] = useState<Training[]>([]);
+  const [allMeasures, setAllMeasures] = useState<Measurement[]>([]);
+  const [filteredTrainings, setFilteredTrainings] = useState<Training[]>([]);
   const [sortedByType, setSortedByType] = useState<any>([]);
+  const [trainingPeriod, setTrainingPeriod] = useState("All");
+  const [selectedMeasurementDate, setSelectedMeasurementDate] = useState<string | null>(null); 
   const [isLoading, setIsLoading] = useState<Boolean>(true);
   const screenWidth = Dimensions.get('window').width;
 
   const trainingTypes = ['chest', 'back', 'shoulder', 'legs', 'biceps', 'triceps', 'abs', 'pullups', 'running'];
 
-  const isDataLoaded =
-    sortedByType &&
-    sortedByType.chest &&
-    sortedByType.back &&
-    sortedByType.shoulder &&
-    sortedByType.legs &&
-    sortedByType.biceps &&
-    sortedByType.triceps &&
-    sortedByType.abs &&
-    sortedByType.pullups &&
-    sortedByType.running;
+  const isDataLoaded = sortedByType && trainingTypes.every(type => sortedByType[type]);
 
   const data = isDataLoaded
     ? {
@@ -67,50 +71,95 @@ const Statistics = () => {
     setIsLoading(false);
   };
 
+  const getAllMeasures = async () => {
+    setIsLoading(true);
+    const response = await fetchAllMeasurements();
+    setAllMeasures(response);
+    setIsLoading(false);
+  };
+
   useEffect(() => {
     getAllTrainings();
-    console.log(allTrainings);
+    getAllMeasures();
   }, []);
 
-  const getSortedTrainingsByType = () => {
+  const filterTrainingsByPeriod = (period: string) => {
+    if (period === 'All') return allTrainings;
+
+    const today = new Date();
+    const pastDate = new Date(today);
+    pastDate.setDate(today.getDate() - parseInt(period));
+
+    return allTrainings.filter((training) => {
+      const trainingDate = new Date(training.date.split('.').reverse().join('-'));
+      return trainingDate >= pastDate;
+    });
+  };
+
+  const getSortedTrainingsByType = (trainings: Training[]) => {
     const sortedByType: any = {};
     trainingTypes.forEach((type) => {
-      sortedByType[type] = allTrainings.filter((training) => training.trainingType === type);
+      sortedByType[type] = trainings.filter((training) => training.trainingType === type);
     });
 
     return sortedByType;
   };
 
-  const lastDaysTrainings = (days: number) => {
-    const today = new Date();
-    const pastDate = new Date(today);
-    pastDate.setDate(today.getDate() - days);
+  useEffect(() => {
+    const filtered = filterTrainingsByPeriod(trainingPeriod);
+    setFilteredTrainings(filtered);
+    const groupedTrainings = getSortedTrainingsByType(filtered);
+    setSortedByType(groupedTrainings);
+  }, [trainingPeriod, allTrainings]);
 
-    const filteredTrainings = allTrainings.filter((training) => {
-      const trainingDate = new Date(training.date.split('.').reverse().join('-'));
-      return trainingDate >= pastDate;
-    });
-
-    return filteredTrainings;
+  const handleTrainingPeriod = (value: string) => {
+    setTrainingPeriod(value);
   };
 
-  useEffect(() => {
-    if (allTrainings.length > 0) {
-      const groupedTrainings = getSortedTrainingsByType();
-      setSortedByType(groupedTrainings);
-      console.log(groupedTrainings);
-    }
-  }, [allTrainings]);
+  const handleMeasurementDate = (value: string) => {
+    setSelectedMeasurementDate(value); // Aktualizacja wybranej daty pomiaru
+  };
+
+  const getMeasurementForDate = (date: string | null) => {
+    if (!date) return null;
+    return allMeasures.find((measure) => measure.date === date); // Znajduje pomiary dla wybranej daty
+  };
+
+  if (isLoading) {
+    return <Text style={{ color: 'white', fontSize: 22 }}>Ładowanie...</Text>;
+  }
+
+  const selectedMeasurement = getMeasurementForDate(selectedMeasurementDate); // Filtrowanie wybranego pomiaru
 
   return (
-    <View style={styles.homeMainBox}>
+    <ScrollView style={styles.homeMainBox}>
       <View style={styles.homePageSection}>
         <Text style={styles.sectionTitle}>Statystyki</Text>
       </View>
-      <View>
-        <Text style={{ color: 'white' }}>Wszystkie dodane treningi: {allTrainings && allTrainings.length}</Text>
-        <Text style={{ color: 'white' }}>Treningi z ostatnich 7 dni: {lastDaysTrainings(7).length}</Text>
-        <Text style={{ color: 'white' }}>Treningi z ostatnich 14 dni: {lastDaysTrainings(14).length}</Text>
+      <View style={{ borderWidth: 1, borderColor: 'white', padding: 8, borderRadius: 10 }}>
+        <View style={{ marginBottom: 10, borderBottomColor: 'white', borderBottomWidth: 1 }}>
+          <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', marginBottom: 4 }}>Treningi</Text>
+        </View>
+        <Text style={{ color: 'white' }}>Wszystkie dodane treningi: {allTrainings.length}</Text>
+        <Text style={{ color: 'white' }}>Treningi z ostatnich 7 dni: {filterTrainingsByPeriod('7').length}</Text>
+        <Text style={{ color: 'white' }}>Treningi z ostatnich 14 dni: {filterTrainingsByPeriod('14').length}</Text>
+
+        <View style={{ marginTop: 20 }}>
+          <Text style={{ color: 'white', fontWeight: 'bold' }}>Pokaż wyniki z ostatnich:</Text>
+
+          <Picker
+            dropdownIconColor="#cbf078"
+            style={{ backgroundColor: 'black', width: '100%' }}
+            selectedValue={trainingPeriod}
+            onValueChange={(itemValue) => handleTrainingPeriod(itemValue)}
+          >
+            <Picker.Item label="Wszystkie" value="All" style={{ backgroundColor: 'black', color: 'white' }} />
+            <Picker.Item label="7 dni" value="7" style={{ backgroundColor: 'black', color: 'white' }} />
+            <Picker.Item label="14 dni" value="14" style={{ backgroundColor: 'black', color: 'white' }} />
+            <Picker.Item label="30 dni" value="30" style={{ backgroundColor: 'black', color: 'white' }} />
+            <Picker.Item label="1 roku" value="365" style={{ backgroundColor: 'black', color: 'white' }} />
+          </Picker>
+        </View>
 
         <View style={styles.trainingsStats}>
           {trainingTypes.map((type) => (
@@ -121,35 +170,64 @@ const Statistics = () => {
           ))}
         </View>
 
-        {/* Sprawdzenie, czy dane są załadowane */}
-        <View style={{justifyContent:'center', alignItems:'center', marginTop:20}}>
-        {data ? (
-          <LineChart
-            data={data}
-            width={screenWidth * 0.93}
-            height={220}
-            fromZero={true}
-            yAxisInterval={1}
-            chartConfig={{
-              backgroundColor: '#cbf078',
-              backgroundGradientFrom: '#4c9173',
-              backgroundGradientTo: '#a2c11c',
-              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              strokeWidth: 2,
-              decimalPlaces: 0,
-              propsForLabels: {
-                fontSize: 10,  
-                fill: '#ffffff', 
-                fontWeight:'bold'
-              },
-            }}
-          />
-        ) : (
-          <Text style={{ color: 'white' }}>Ładowanie danych...</Text>
-        )}
+        <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
+          {data ? (
+            <LineChart
+              data={data}
+              width={screenWidth * 0.9}
+              height={220}
+              fromZero={true}
+              yAxisInterval={1}
+              chartConfig={{
+                backgroundColor: '#cbf078',
+                backgroundGradientFrom: '#4c9173',
+                backgroundGradientTo: '#a2c11c',
+                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                strokeWidth: 2,
+                decimalPlaces: 0,
+                propsForLabels: {
+                  fontSize: 10,
+                  fill: '#ffffff',
+                  fontWeight: 'bold',
+                },
+              }}
+            />
+          ) : (
+            <Text style={{ color: 'white' }}>Ładowanie danych...</Text>
+          )}
         </View>
       </View>
-    </View>
+
+      {/* Nowa sekcja dla pomiarów ciała */}
+      <View style={{ borderWidth: 1, borderColor: 'white', padding: 8, borderRadius: 10, marginBottom:10 }}>
+        <View style={{ marginBottom: 10, borderBottomColor: 'white', borderBottomWidth: 1 }}>
+          <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', marginBottom: 4 }}>Pomiary ciała</Text>
+        </View>
+        <Picker
+          dropdownIconColor="#cbf078"
+          style={{ backgroundColor: 'black', width: '100%' }}
+          selectedValue={selectedMeasurementDate}
+          onValueChange={(itemValue) => handleMeasurementDate(itemValue)}
+        >
+          {allMeasures.map((measure, index) => {
+            return (
+              <Picker.Item label={measure.date} value={measure.date} style={{ backgroundColor: 'black', color: 'white' }} key={index} />
+            );
+          })}
+        </Picker>
+
+        {selectedMeasurement ? (
+          <View style={styles.measurementStats}>
+            <Text style={{ color: 'white' }}>Waga: {selectedMeasurement.weight} kg</Text>
+            <Text style={{ color: 'white' }}>Klatka: {selectedMeasurement.chest} cm</Text>
+            <Text style={{ color: 'white' }}>Talia: {selectedMeasurement.waist} cm</Text>
+            <Text style={{ color: 'white' }}>Biodra: {selectedMeasurement.hips} cm</Text>
+          </View>
+        ) : (
+          <Text style={{ color: 'white', marginTop: 10 }}>Wybierz datę pomiarów, aby zobaczyć szczegóły.</Text>
+        )}
+      </View>
+    </ScrollView>
   );
 };
 
@@ -158,8 +236,7 @@ export default Statistics;
 const styles = StyleSheet.create({
   homeMainBox: {
     flex: 1,
-    paddingVertical: 8,
-    paddingHorizontal: 14,
+    paddingHorizontal: 8,
   },
   homePageSection: {
     width: '100%',
@@ -186,6 +263,9 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor:'#222831'
+    backgroundColor: '#222831',
+  },
+  measurementStats: {
+    marginTop: 10,
   },
 });

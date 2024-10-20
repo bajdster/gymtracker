@@ -59,7 +59,6 @@ const Measurement: React.FC = () => {
     getAllMeasurements();
   }, []);
 
-  console.log(allMeasures)
 
   const getBMIBarStyle = () => {
     const bmi = checkBMI();
