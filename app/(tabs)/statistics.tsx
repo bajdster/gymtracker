@@ -5,6 +5,7 @@ import { LineChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
 import { getTrainingsNames } from '@/constants/Excercises';
 import { Picker } from '@react-native-picker/picker';
+import measurementNames from '@/constants/Measurements';
 
 const Statistics = () => {
   interface RepsState {
@@ -131,6 +132,7 @@ const Statistics = () => {
 
   const selectedMeasurement = getMeasurementForDate(selectedMeasurementDate); // Filtrowanie wybranego pomiaru
 
+  console.log(selectedMeasurement)
   return (
     <ScrollView style={styles.homeMainBox}>
       <View style={styles.homePageSection}>
@@ -203,7 +205,7 @@ const Statistics = () => {
         <View style={{ marginBottom: 10, borderBottomColor: 'white', borderBottomWidth: 1 }}>
           <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', marginBottom: 4 }}>Pomiary ciała</Text>
         </View>
-        <Picker
+        {allMeasures.length > 0 ? <Picker
           dropdownIconColor="#cbf078"
           style={{ backgroundColor: 'black', width: '100%' }}
           selectedValue={selectedMeasurementDate}
@@ -214,15 +216,29 @@ const Statistics = () => {
               <Picker.Item label={measure.date} value={measure.date} style={{ backgroundColor: 'black', color: 'white' }} key={index} />
             );
           })}
-        </Picker>
+        </Picker>: <Text style={{ color: 'white', marginBottom: 4 }}>Brak dodanych pomiarów ciała</Text>}
 
         {selectedMeasurement ? (
-          <View style={styles.measurementStats}>
-            <Text style={{ color: 'white' }}>Waga: {selectedMeasurement.weight} kg</Text>
-            <Text style={{ color: 'white' }}>Klatka: {selectedMeasurement.chest} cm</Text>
-            <Text style={{ color: 'white' }}>Talia: {selectedMeasurement.waist} cm</Text>
-            <Text style={{ color: 'white' }}>Biodra: {selectedMeasurement.hips} cm</Text>
-          </View>
+
+            <View style={styles.trainingsStats}>
+
+            {selectedMeasurement && (
+              Object.keys(selectedMeasurement).length > 0 ? (
+                Object.keys(selectedMeasurement)
+                .filter((key) => key !== 'id' && key !== 'date')
+                .map(key => (
+                  <View key={key} style={styles.tableCell}>
+                    <Text style={{ color: 'white' }}>{measurementNames(key)}</Text>
+                    <Text style={{ color: 'white' }}>{selectedMeasurement[key]}</Text>
+                  </View>
+                ))
+              ) : (
+                <Text style={{ color: 'white' }}>Brak danych do wyświetlenia</Text>
+              )
+            )}
+            </View>
+
+
         ) : (
           <Text style={{ color: 'white', marginTop: 10 }}>Wybierz datę pomiarów, aby zobaczyć szczegóły.</Text>
         )}

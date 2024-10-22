@@ -43,17 +43,54 @@ const Measurement: React.FC = () => {
   }
 
   const getAllMeasurements = async () => {
-    setIsLoading(true)
-    const response = await fetchAllMeasurements();
-
-    // Ustawienie stanu na najnowszy pomiar
-    if (response.length > 0) {
-      const reversedResponse = response.reverse()
-      setAllMeasures(reversedResponse)
-      setFetchedMeasurement(reversedResponse[0]);
+    try {
+      setIsLoading(true);
+      const response = await fetchAllMeasurements();
+      
+      console.log('Fetched measurements:', response); // Dodaj log tutaj
+  
+      if (Array.isArray(response) && response.length > 0) {
+        const reversedResponse = response.reverse();
+        setAllMeasures(reversedResponse);
+        
+        const latestMeasurement = reversedResponse[0] && typeof reversedResponse[0] === 'object' 
+          ? reversedResponse[0] 
+          : null;
+  
+        console.log('Latest measurement:', latestMeasurement); // Dodaj log tutaj
+  
+        if (latestMeasurement) {
+          setFetchedMeasurement({
+            height: latestMeasurement.height ?? '', 
+            weight: latestMeasurement.weight ?? '', 
+            chest: latestMeasurement.chest ?? '', 
+            arm: latestMeasurement.arm ?? '', 
+            waist: latestMeasurement.waist ?? '', 
+            hips: latestMeasurement.hips ?? '', 
+            thigh: latestMeasurement.thigh ?? '', 
+            forearm: latestMeasurement.forearm ?? '',
+            date: latestMeasurement.date ?? '',
+            bmi: latestMeasurement.bmi ?? ''
+          });
+        } else {
+          console.warn('Unexpected measurement format:', reversedResponse[0]);
+          setFetchedMeasurement({});
+        }
+      } 
+      //no measures fetched from API
+      else 
+      {
+        setAllMeasures([]);
+        setFetchedMeasurement({});
+      }
+    } catch (error) {
+      console.error('Error fetching measurements:', error);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false)
   };
+  
+  
 
   useEffect(() => {
     getAllMeasurements();
@@ -83,6 +120,10 @@ const Measurement: React.FC = () => {
     };
   };
 
+  const isMeasurementEmpty = (measurement) => {
+    return Object.keys(measurement).every(key => measurement[key] === '');
+  };
+
   const sendMeasurement = async () => {
     const date = new Date();
     const formattedDate = date.toISOString().split('T')[0];
@@ -91,12 +132,24 @@ const Measurement: React.FC = () => {
       date: formattedDate,
       bmi: checkBMI(),
     };
-    await sendMeasurementToDB(data);
-    await getAllMeasurements()
+    if(!isMeasurementEmpty(measurement))
+    {
+      await sendMeasurementToDB(data);
+      await getAllMeasurements()
+    }
+    else
+    {
+      Alert.alert("Wpisz dane pomiarowe")
+    }
   };
 
   const fillInputsWithLatestMeasurements = () => {
-    setMeasurement(fetchedMeasurement);
+    if(Object.keys(fetchedMeasurement).length === 0)
+    {
+      Alert.alert("Brak dodanych pomiarów do wczytania")
+      return 
+    }
+    else setMeasurement(fetchedMeasurement);
   }
 
   if(isLoading)
@@ -122,14 +175,14 @@ const Measurement: React.FC = () => {
             <View>
               <Text style={styles.measureLabel}>Ostatni pomiar {fetchedMeasurement && fetchedMeasurement.date}</Text>
               <View style={styles.measurementsStats}>
-                {fetchedMeasurement && Object.keys(fetchedMeasurement)
-                  .filter((key) => key !== 'id' && key !== 'date')
+                {fetchedMeasurement && Object.keys(fetchedMeasurement).length > 0 ? Object.keys(fetchedMeasurement)
+                  .filter((key) => key !== 'id' && key !== 'date' && fetchedMeasurement[key] !== null && fetchedMeasurement[key] !== undefined)
                   .map((key) => (
                     <View key={key} style={styles.tableCell}>
                       <Text style={{ color: 'white' }}>{measurementNames(key)}</Text>
                       <Text style={{ color: 'white' }}>{fetchedMeasurement[key]}</Text>
                     </View>
-                ))}
+                )): <Text style={{color:'white', paddingBottom:10}}>Brak dodanych ostatnich pomiarów</Text>}
               </View>
             </View>
           <Text style={styles.measureLabel}>Dane podstawowe</Text>
@@ -247,7 +300,7 @@ const Measurement: React.FC = () => {
         </View>
 
             
-        {allMeasures && allMeasures.map((measure, measureIndex) => {
+        {allMeasures.length > 0 ? allMeasures.map((measure, measureIndex) => {
           return (
             <Collapsible title={measure.date} key={`${measure.id}-${measureIndex}`}>
               <View style={{flexDirection:'row', flexWrap:'wrap'}}>
@@ -262,7 +315,7 @@ const Measurement: React.FC = () => {
               </View>
             </Collapsible>
           );
-        })}
+        }): <Text style={{color:'white', padding:20}}>Brak dodanych wcześniejszych pomiarów</Text>}
           
 
 

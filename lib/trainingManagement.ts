@@ -51,6 +51,7 @@ export async function fetchHistoryShortTrainings()
 {
   const response = await fetch('https://gymtracker-c5f99-default-rtdb.firebaseio.com/trainings.json?orderBy=%22date%22&limitToLast=20');
   return response
+  
 }
 
 export async function fetchAllTrainings()
@@ -67,6 +68,7 @@ export async function fetchAllTrainings()
 
       return trainingsArray
     } else {
+      return []
       console.error("Unexpected data format:", data);
     }
   } catch (error) {
@@ -115,6 +117,7 @@ export async function fetchAllMeasurements()
 
       return measurementsArray
     } else {
+      return []
       console.error("Unexpected data format:", data);
     }
   } catch (error) {
