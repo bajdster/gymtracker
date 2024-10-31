@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, TextInput, Alert } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, TextInput, Alert, KeyboardAvoidingView, Platform } from 'react-native'
 import React, {useState} from 'react'
 import exercises from '@/constants/Excercises'
 import {Picker} from '@react-native-picker/picker';
@@ -62,50 +62,56 @@ const Running:React.FC<RunningProps> = ({trainingType, onSendHandler}) => {
 
 
   return (
-    <ScrollView>
-      <View style={styles.excerciseAmountInputsContainer}>
-        <View style={{width:'100%'}}>
-          <Text style={styles.inputLabel}>Wybierz ćwiczenie</Text>
-          <Picker
-            dropdownIconColor="#cbf078"
-            style={{ backgroundColor: 'black', width: '100%' }}
-            selectedValue={selectedExercise}
-            onValueChange={(itemValue) => setSelectedExercise(itemValue)}
-          >
-            {availableExercises.map((exercise) => (
-              <Picker.Item
-                label={exercise}
-                value={exercise}
-                style={{ backgroundColor: 'black', color: 'white' }}
-                key={exercise}
-              />
-            ))}
-          </Picker>
-        </View>
-      </View>
-
-      <View style={styles.pickerContainer}>
-      {Array.from({ length: parseInt(seriesCount, 10) }, (_, index) => (
-        <View key={index} style={styles.excerciseDropdown}>
-          <Text style={styles.inputLabel}>Bieg {index + 1}</Text>
-          <View style={styles.inputRow}>
-            <View>
-              <Text style={styles.inputLabel}>Czas (hh:mm:ss)</Text>
-              <TextInput
-                keyboardType="numeric"
-                style={styles.amountInput}
-                value={repsState[index]?.reps || ''} // Zabezpieczenie
-                onChangeText={(value) => handleInputChange(index, 'reps', value)}
-                placeholder="hh:mm:ss"
-                maxLength={8} // Ograniczamy do 8 znaków (np. 01:23:45)
-              />
-            </View>
+    <KeyboardAvoidingView
+    style={{ flex: 1 }}
+    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
+    >
+      <ScrollView>
+        <View style={styles.excerciseAmountInputsContainer}>
+          <View style={{width:'100%'}}>
+            <Text style={styles.inputLabel}>Wybierz ćwiczenie</Text>
+            <Picker
+              dropdownIconColor="#cbf078"
+              style={{ backgroundColor: 'black', width: '100%' }}
+              selectedValue={selectedExercise}
+              onValueChange={(itemValue) => setSelectedExercise(itemValue)}
+            >
+              {availableExercises.map((exercise) => (
+                <Picker.Item
+                  label={exercise}
+                  value={exercise}
+                  style={{ backgroundColor: 'black', color: 'white' }}
+                  key={exercise}
+                />
+              ))}
+            </Picker>
           </View>
         </View>
-      ))}
-    </View>
-        <AddTrainingButton onAddTraining={addTrainingHandler}/>
-    </ScrollView>
+
+        <View style={styles.pickerContainer}>
+        {Array.from({ length: parseInt(seriesCount, 10) }, (_, index) => (
+          <View key={index} style={styles.excerciseDropdown}>
+            <Text style={styles.inputLabel}>Bieg {index + 1}</Text>
+            <View style={styles.inputRow}>
+              <View>
+                <Text style={styles.inputLabel}>Czas (hh:mm:ss)</Text>
+                <TextInput
+                  keyboardType="numeric"
+                  style={styles.amountInput}
+                  value={repsState[index]?.reps || ''} // Zabezpieczenie
+                  onChangeText={(value) => handleInputChange(index, 'reps', value)}
+                  placeholder="hh:mm:ss"
+                  maxLength={8} // Ograniczamy do 8 znaków (np. 01:23:45)
+                />
+              </View>
+            </View>
+          </View>
+        ))}
+      </View>
+          <AddTrainingButton onAddTraining={addTrainingHandler}/>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 

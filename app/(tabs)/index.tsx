@@ -40,8 +40,9 @@ const styles = StyleSheet.create({
 //maybe create store for statistics ? 
 // create separate file with types to implement DRY 
 //dodać ikonki ćwiczeń (dłuśza z powodu przekształcenia całego pliku Excercises.ts)
-//dostosowac statystyki do wybranego przedziału dni/miesiecy/lat
+//dodać odświeżanie przy przeciągnieciu do góry
 
+//dostosowac statystyki do wybranego przedziału dni/miesiecy/lat +
 //dodać filtr w history do szukania po ćwiczeniu lub treningu +
 //modal when training is added successfully? +
 //osobna tab z pomiarami ciała +

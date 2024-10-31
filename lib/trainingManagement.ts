@@ -69,7 +69,6 @@ export async function fetchAllTrainings()
       return trainingsArray
     } else {
       return []
-      console.error("Unexpected data format:", data);
     }
   } catch (error) {
     console.error("Error fetching data:", error);

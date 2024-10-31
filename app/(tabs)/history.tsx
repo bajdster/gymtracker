@@ -112,9 +112,15 @@ const History = () => {
     </View>
   );
 
-  if (!allTrainings) {
-    return (<Text style={{color:'white'}}>Nie dodano żadnego treningu</Text>);
+  if(allTrainings.length <= 0)
+  {
+    return (
+    <View style={{width:'100%', padding:12}}>
+      <Text style={{color:'white', fontSize:20, fontWeight:'bold'}}>W historii nie ma żadnego dodanego treningu</Text>
+      <Text style={{color:'white', marginTop:10}}>Dodaj trening w ekranie głównym aby wyświetlić go w historii</Text>
+    </View>);
   }
+
   if (isLoading || isDeleting) {
     return <Text style={{ color: 'white', fontSize: 22 }}>Ładowanie...</Text>;
   }

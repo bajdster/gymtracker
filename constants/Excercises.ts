@@ -3,27 +3,33 @@ const exercises:{} = {
     chest: [
       "Wyciskanie sztangi na ławce poziomej",
       "Wyciskanie hantli na ławce skośnej",
-      "Rozpiętki na wyciągu",
+      "Rozpiętki na wyciągu (brama)",
       "Rozpiętki na ławce",
+      "Rozpiętki na maszynie",
       "Wyciskanie sztangi na ławce skośnej"
     ],
     back: [
       "Podciąganie na drążku",
       "Ściąganie drążka nachwytem do klatki",
       "Martwy ciąg",
-      "Wiosłowanie hantlami"
+      "Wiosłowanie hantlami",
+      "Wiosłowanie końcem sztangi w opadzie tułowia",
+      "Unoszenie tułowia na ławce rzymskiej"
     ],
     shoulder: [
-      "Wyciskanie sztangi nad głowę - żołnierskie",
+      "Wyciskanie sztangi nad głowę stojąc",
       "Arnoldki -  wyciskanie hantli nad głowę z rotacją",
       "Unoszenie hantli w bok",
-      "Unoszenie hantli nad głowę klasyczne"
+      "Unoszenie hantli nad głowę klasyczne",
+      "Wyciskanie sztangi na maszynie smitha siedząc"
     ],
     triceps: [
-        "Wyciskanie francuskie w leżeniu",
+        "Wyciskanie sztangi francuskie w leżeniu",
+        "Wyciskanie hantli francuskie w leżeniu",
+        "Prostowanie ramion z linką wyciągu górnego",
         "Pompki na poręczach",
-        "Prostowanie ramoin z linką wyciągu górnego",
-        "Pompki w podporze tyłem"
+        "Pompki w podporze tyłem",
+        "Prostowanie ręki z hantlem w podparciu o ławkę"
     ],
     legs: [
       "Przysiady ze sztangą/hantlem",
@@ -32,7 +38,8 @@ const exercises:{} = {
       "Wypychanie suwnicy leżąc",
       "Wyprosty kolan na maszynie siedząc",
       "Przywodzenie/Odwodzenie nóg na maszynie",
-      "Żuraw"
+      "Żuraw",
+      "Wnosy na łydkach"
     ],
     biceps:[
         "Unoszenie hantli stylem młotkowym",
@@ -45,9 +52,9 @@ const exercises:{} = {
     abs:[
         "Brzuszki z blokowaniem nóg",
         "Brzuszki na maszynie",
-        "Deska",
         "Unoszenie prostych nóg do drążka",
         "Russian twist",
+        "Rowerek"
     ],
     pullups:[
         "Podciąganie na drążku nachwytem",
@@ -57,6 +64,7 @@ const exercises:{} = {
         "Bieg 1km",
         "Bieg 3km",
         "Bieg 5km",
+        "Bieg 6km",
         "Bieg 10km",
     ]
 

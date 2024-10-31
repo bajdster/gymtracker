@@ -35,7 +35,7 @@ const HistoryShort: React.FC = () => {
 
         setTrainings(trainingsArray);
       } else {
-        console.error("Unexpected data format:", data);
+        setTrainings([])
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -68,7 +68,13 @@ const HistoryShort: React.FC = () => {
   
   if(trainings.length <= 0)
   {
-    return <Text style={{ color: 'white', fontSize:22 }}>Nie masz jeszcze dodanych treningów</Text>
+    return (
+      <View style={{width:'100%'}}>
+      <Text style={styles.sectionTitle}>Ostatnie treningi</Text>
+      <Text style={{color:'white', fontSize:20, fontWeight:'bold'}}>Nie masz jeszcze dodanych żadnych treningów</Text>
+      <Text style={{color:'white', marginTop:10}}>Dodaj trening wybierając kategorię treningu powyżej</Text>
+    </View>
+    )
   }
 
   return (
