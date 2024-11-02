@@ -172,7 +172,7 @@ const Measurement: React.FC = () => {
             </TouchableOpacity>
           </View>
 
-            <View>
+            <View style={{backgroundColor:'#181c22', borderRadius:10,}}>
               <Text style={styles.measureLabel}>Ostatni pomiar {fetchedMeasurement && fetchedMeasurement.date}</Text>
               <View style={styles.measurementsStats}>
                 {fetchedMeasurement && Object.keys(fetchedMeasurement).length > 0 ? Object.keys(fetchedMeasurement)
@@ -186,7 +186,7 @@ const Measurement: React.FC = () => {
               </View>
             </View>
           <Text style={styles.measureLabel}>Dane podstawowe</Text>
-          <View style={styles.inputRow}>
+          <View style={[styles.inputRow,{backgroundColor:'#181c22', borderRadius:10,}]}>
             <View>
               <Text style={styles.inputLabel}>Wzrost (cm)</Text>
               <TextInput
@@ -211,7 +211,7 @@ const Measurement: React.FC = () => {
             <Text style={styles.inputLabel}>{checkBMI()}</Text>
             <View style={getBMIBarStyle()} />
           </View>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: '100%', justifyContent: 'space-between' }}>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: '100%', justifyContent: 'space-between', backgroundColor:'#181c22', borderRadius:10, }}>
             <View style={{ flexDirection: 'row' , alignItems:'center', justifyContent:'center'}}>
               <View style={[styles.BMICircle, { backgroundColor: 'blue' }]}></View>
               <Text style={styles.bmiLabel}>Niedowaga</Text>
@@ -359,6 +359,8 @@ const styles = StyleSheet.create({
   inputRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    backgroundColor:'#181c22', 
+    borderRadius:10,
   },
   inputLabel: {
     color: 'white',

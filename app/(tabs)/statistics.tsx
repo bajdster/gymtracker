@@ -138,7 +138,7 @@ const Statistics = () => {
       <View style={styles.homePageSection}>
         <Text style={styles.sectionTitle}>Statystyki</Text>
       </View>
-      <View style={{ borderWidth: 1, borderColor: 'white', padding: 8, borderRadius: 10 }}>
+      <View style={{ borderWidth: 1, borderColor: 'white', padding: 8, borderRadius: 10, backgroundColor:'#181c22' }}>
         <View style={{ marginBottom: 10, borderBottomColor: 'white', borderBottomWidth: 1 }}>
           <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', marginBottom: 4 }}>Treningi</Text>
         </View>
@@ -201,7 +201,7 @@ const Statistics = () => {
       </View>
 
       {/* Nowa sekcja dla pomiarów ciała */}
-      <View style={{ borderWidth: 1, borderColor: 'white', padding: 8, borderRadius: 10, marginBottom:10 }}>
+      <View style={{ borderWidth: 1, borderColor: 'white', padding: 8, borderRadius: 10, marginBottom:10,backgroundColor:'#181c22' }}>
         <View style={{ marginBottom: 10, borderBottomColor: 'white', borderBottomWidth: 1 }}>
           <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', marginBottom: 4 }}>Pomiary ciała</Text>
         </View>

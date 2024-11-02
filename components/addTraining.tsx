@@ -17,7 +17,7 @@ const iconColors = ["#5585b5","#9fd3c7","#f95959","#347474","#6643b5","#f8f398",
 
   
   return (
-    <View>
+    <View style={{backgroundColor:'#181c22', borderRadius:10, padding:4}}>
       <Text style={styles.sectionTitle}>Dodaj trening</Text>
         <View style={styles.trainingIcons}>
           {trainings.map((training, index)=>

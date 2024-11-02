@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Modal, TextInput } from 'react-native';
 import { deleteTrainingFromDB, fetchAllTrainings } from '@/lib/trainingManagement';
-import { Collapsible } from '@/components/Collapsible'; // Importujemy Collapsible
+import { Collapsible } from '@/components/Collapsible';
 
 const History = () => {
   interface RepsState {
@@ -19,9 +19,9 @@ const History = () => {
 
   const [allTrainings, setAllTrainings] = useState<Training[]>([]);
   const [filteredTrainings, setFilteredTrainings] = useState<Training[]>([]);
-  
   const [isLoading, setIsLoading] = useState<Boolean>(true);
   const [isDeleting, setIsDeleting] = useState<Boolean>(false);
+  const [refreshing, setRefreshing] = useState<Boolean>(false);
   const [modalVisible, setModalVisible] = useState<Boolean>(false);
   const [modalMessage, setModalMessage] = useState('');
   const [selectedTrainingId, setSelectedTrainingId] = useState<string | null>(null);
@@ -29,7 +29,7 @@ const History = () => {
   const getAllTrainings = async () => {
     setIsLoading(true);
     const response = await fetchAllTrainings();
-    
+
     if (response) {
       const sorted: Training[] = response.sort((a, b) => {
         const dateA = new Date(a.date.split('.').reverse().join('-'));
@@ -47,9 +47,7 @@ const History = () => {
 
   useEffect(() => {
     getAllTrainings();
-
   }, []);
-
 
   const confirmDeleteHandler = (id: string) => {
     setSelectedTrainingId(id); 
@@ -67,7 +65,6 @@ const History = () => {
     }
   };
 
-  //filtrowanie po type bierze po angielskiej nazwie np chest a nie klatka
   const handleInputChange = (value: string) => {
     if (!value) {
       setFilteredTrainings(allTrainings);
@@ -76,7 +73,6 @@ const History = () => {
         const dateMatch = training.date.includes(value);
         const exerciseMatch = training.selectedExercise.toLowerCase().includes(value.toLowerCase());
         const typeMatch = training.trainingType.toLowerCase().includes(value.toLowerCase());
-  
         return dateMatch || exerciseMatch || typeMatch;
       });
       setFilteredTrainings(filtered); 
@@ -91,11 +87,9 @@ const History = () => {
             {item.trainingType === 'running' && (
               <Text style={styles.textStyle}>Bieg {index + 1} - Czas: {rep.reps}</Text>
             )}
-
             {(item.trainingType === 'pullups' || item.trainingType === 'abs') && (
               <Text style={styles.textStyle}>Seria {index + 1} - Ilość powtórzeń: {rep.reps}</Text>
             )}
-
             {item.trainingType !== 'running' && item.trainingType !== 'abs' && item.trainingType !== 'pullups' && (
               <Text style={styles.textStyle}>
                 Seria {index + 1} - Ilość powtórzeń: {rep.reps}, Ciężar: {rep.weight} kg
@@ -112,13 +106,19 @@ const History = () => {
     </View>
   );
 
-  if(allTrainings.length <= 0)
-  {
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getAllTrainings();
+    setRefreshing(false);
+  };
+
+  if (allTrainings.length <= 0) {
     return (
-    <View style={{width:'100%', padding:12}}>
-      <Text style={{color:'white', fontSize:20, fontWeight:'bold'}}>W historii nie ma żadnego dodanego treningu</Text>
-      <Text style={{color:'white', marginTop:10}}>Dodaj trening w ekranie głównym aby wyświetlić go w historii</Text>
-    </View>);
+      <View style={{width:'80%', padding:12}}>
+        <Text style={{color:'white', fontSize:20, fontWeight:'bold'}}>W historii nie ma żadnego dodanego treningu</Text>
+        <Text style={{color:'white', marginTop:10}}>Dodaj trening w ekranie głównym aby wyświetlić go w historii</Text>
+      </View>
+    );
   }
 
   if (isLoading || isDeleting) {
@@ -137,9 +137,9 @@ const History = () => {
         data={filteredTrainings}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
       />
-
-      {/* Modal potwierdzający usunięcie */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -175,7 +175,9 @@ const styles = StyleSheet.create({
   homeMainBox: {
     flex: 1,
     paddingVertical: 8,
-    paddingHorizontal: 14,
+    paddingHorizontal: 4,
+    backgroundColor:'#181c22', 
+    borderRadius:10,
   },
   homePageSection: {
     width: '100%',
