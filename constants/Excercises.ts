@@ -3,10 +3,9 @@ const exercises:{} = {
     chest: [
       "Wyciskanie sztangi na ławce poziomej",
       "Wyciskanie hantli na ławce skośnej",
-      "Rozpiętki na wyciągu (brama)",
-      "Rozpiętki na ławce",
-      "Rozpiętki na maszynie",
-      "Wyciskanie sztangi na ławce skośnej"
+      "Rozpiętki z hantlami",
+      "Wyciskanie sztangi na ławce skośnej",
+      "Rozpiętki przy użyciu linek"
     ],
     back: [
       "Podciąganie na drążku",
@@ -14,7 +13,7 @@ const exercises:{} = {
       "Martwy ciąg",
       "Wiosłowanie hantlami",
       "Wiosłowanie końcem sztangi w opadzie tułowia",
-      "Unoszenie tułowia na ławce rzymskiej"
+      "Przyciąganie linki wyciągu siedząc"
     ],
     shoulder: [
       "Wyciskanie sztangi nad głowę stojąc",
@@ -70,6 +69,21 @@ const exercises:{} = {
 
   };
 
+  export const imagesSources = {
+    "Wyciskanie sztangi na ławce poziomej": require('../assets/images/wyciskanie_sztangi_poziom.png'),
+    "Wyciskanie hantli na ławce skośnej": require('../assets/images/wyciskanie_hantli_skos.png'),
+    "Rozpiętki z hantlami": require('../assets/images/rozpietki_hantle.png'),
+    "Wyciskanie sztangi na ławce skośnej": require('../assets/images/wyciskanie_sztangi_skos.png'),
+    "Rozpiętki przy użyciu linek": require('../assets/images/rozpietki_brama.png'),
+
+    "Podciąganie na drążku": require("../assets/images/pullupExe.png"),
+    "Ściąganie drążka nachwytem do klatki": require("../assets/images/sciaganie_nachwytem.png"),
+    "Martwy ciąg": require("../assets/images/martwy_ciag.png"),
+    "Wiosłowanie hantlami": require("../assets/images/wioslowanie_hantlami.png"),
+    "Wiosłowanie końcem sztangi w opadzie tułowia": require("../assets/images/wioslowanie_koncem_sztangi.png"),
+    "Przyciąganie linki wyciągu siedząc": require("../assets/images/przyciaganie_linki_wyciagu.png"),
+  };
+  
 
     interface Training {
       trainingType:string,

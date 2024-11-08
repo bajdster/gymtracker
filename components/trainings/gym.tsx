@@ -1,34 +1,47 @@
-import { Alert, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Platform } from 'react-native';
-import React, { useState } from 'react';
+import { Alert, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Platform, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import exercises from '@/constants/Excercises';
 import { Picker } from '@react-native-picker/picker';
 import AddTrainingButton from '../addTrainingButton';
+import { Video } from 'expo-av';
+import { imagesSources } from '@/constants/Excercises';
 
 interface GymProps {
   trainingType: string,
-  onSendHandler: (trainingDetails:trainingDetails)=> void
+  onSendHandler: (trainingDetails: trainingDetails) => void
 }
 
 interface trainingDetails {
   trainingType: string;
-  repsState: [],
-  selectedExercise:string
+  repsState: { reps: string; weight: string }[],
+  selectedExercise: string
 }
 
 const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler }) => {
   const [seriesCount, setSeriesCount] = useState<string>('4');
-  const [repsState, setRepsState] = useState<{ reps: string; weight: string }[]>([{ reps: '8', weight: '' },{ reps: '8', weight: '' },{ reps: '8', weight: '' },{ reps: '8', weight: '' }]); 
+  const [repsState, setRepsState] = useState<{ reps: string; weight: string }[]>([{ reps: '8', weight: '' }, { reps: '8', weight: '' }, { reps: '8', weight: '' }, { reps: '8', weight: '' }]);
 
-  const availableExercises: string[] = exercises[trainingType]; 
-  const [selectedExercise, setSelectedExercise] = useState<string>(availableExercises[0]); 
+  const availableExercises: string[] = exercises[trainingType] || []; 
+  const [selectedExercise, setSelectedExercise] = useState<string>(availableExercises[0] || ''); 
+  const [imageSource, setImageSource] = useState(null);
+
+  useEffect(() => {
+    setImageSource(getImageSource(selectedExercise));
+    console.log(imageSource)
+  }, [selectedExercise]);
+
+
+  const getImageSource = (exerciseName: string) => {
+    return imagesSources[exerciseName] || null;
+  };
 
   const handleSeriesCountChange = (value: string) => {
     setSeriesCount(value);
     const parsedCount = parseInt(value, 10);
     if (!isNaN(parsedCount) && parsedCount >= 0) {
       const newRepsState = Array.from({ length: parsedCount }, (_, i) => ({
-        reps: repsState[i]?.reps || '8', // Zabezpieczenie
-        weight: repsState[i]?.weight || '', // Zabezpieczenie
+        reps: repsState[i]?.reps || '8',
+        weight: repsState[i]?.weight || '',
       }));
       setRepsState(newRepsState);
     } else {
@@ -47,35 +60,29 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler }) => {
     }
   };
 
-  console.log(repsState);
-
   const addTrainingHandler = () => {
-    const hasEmptyFields = repsState.some((series) => {
-      return !series.reps || !series.weight;
-    });
-  
+    const hasEmptyFields = repsState.some((series) => !series.reps || !series.weight);
     if (hasEmptyFields) {
       Alert.alert("Proszę uzupełnić dane treningu", "Należy uzupełnić ilość powtórzeń i ciężar");
       return;
     }
-  
     onSendHandler({
       trainingType,
       repsState,
       selectedExercise
     });
   };
+  
 
   return (
     <KeyboardAvoidingView
-    style={{ flex: 1 }}
-    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
-  >
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
+    >
       <ScrollView>
         <View style={styles.excerciseAmountInputsContainer}>
           <View>
-            <Text style={styles.inputLabel}>Wybierz ćwiczenie</Text>
             <Picker
               dropdownIconColor="#cbf078"
               style={{ backgroundColor: 'black', width: 250 }}
@@ -92,6 +99,7 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler }) => {
               ))}
             </Picker>
           </View>
+
           <View style={styles.seriesPickerContainer}>
             <Text style={styles.inputLabel}>Ilość serii</Text>
             <Picker
@@ -100,38 +108,50 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler }) => {
               selectedValue={seriesCount}
               onValueChange={(itemValue) => handleSeriesCountChange(itemValue)}
             >
-              <Picker.Item label="1" value="1" style={{ backgroundColor: 'black', color: 'white' }}/>
-              <Picker.Item label="2" value="2" style={{ backgroundColor: 'black', color: 'white' }}/>
-              <Picker.Item label="3" value="3" style={{ backgroundColor: 'black', color: 'white' }}/>
-              <Picker.Item label="4" value="4" style={{ backgroundColor: 'black', color: 'white' }}/>
-              <Picker.Item label="5" value="5" style={{ backgroundColor: 'black', color: 'white' }}/>
+              {[...Array(5)].map((_, i) => (
+                <Picker.Item
+                  label={`${i + 1}`}
+                  value={`${i + 1}`}
+                  style={{ backgroundColor: 'black', color: 'white' }}
+                  key={i}
+                />
+              ))}
             </Picker>
           </View>
         </View>
-
-        {/* Picker dla liczby serii */}
+        <View style={{width: '100%', alignItems: 'center',  marginVertical: 10}}>
+        {imageSource ? (
+        <Image
+          source={imageSource} // Bezpośrednie przypisanie obrazu
+          style={{ width: 150, height: 150 }}
+          resizeMode="cover"
+        />
+        ) : (
+        <Text style={styles.inputLabel}>Brak obrazu dla tego ćwiczenia</Text>
+        )}
+        </View>
 
 
         <View style={styles.pickerContainer}>
           {Array.from({ length: parseInt(seriesCount, 10) }, (_, index) => (
             <View key={index} style={styles.excerciseDropdown}>
-              <Text style={styles.inputLabel}>Seria {index + 1}</Text>
+              <Text style={[styles.inputLabel, { color:'white', fontWeight:'bold', textAlign:'center'}]}>Seria {index + 1}</Text>
               <View style={styles.inputRow}>
                 <View>
                   <Text style={styles.inputLabel}>Ilość powtórzeń</Text>
                   <TextInput
                     keyboardType="numeric"
                     style={styles.amountInput}
-                    value={repsState[index]?.reps || ''} // Zabezpieczenie
+                    value={repsState[index]?.reps || ''}
                     onChangeText={(value) => handleInputChange(index, 'reps', value)}
                   />
                 </View>
-                <View>
+                <View style={{marginTop:6}}>
                   <Text style={styles.inputLabel}>Ciężar (kg)</Text>
                   <TextInput
                     keyboardType="numeric"
                     style={styles.amountInput}
-                    value={repsState[index]?.weight || ''} // Zabezpieczenie
+                    value={repsState[index]?.weight || ''}
                     onChangeText={(value) => handleInputChange(index, 'weight', value)}
                   />
                 </View>
@@ -139,7 +159,7 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler }) => {
             </View>
           ))}
         </View>
-          <AddTrainingButton onAddTraining={addTrainingHandler}/>
+        <AddTrainingButton onAddTraining={addTrainingHandler} />
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -150,32 +170,44 @@ export default Gym;
 const styles = StyleSheet.create({
   excerciseDropdown: {
     marginTop: 12,
+    backgroundColor:'#222831',
+    width:'45%',
+    padding:8,
+    marginLeft:10,
+    borderRadius:10
   },
   excerciseAmountInputsContainer: {
     marginTop: 10,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
   },
   seriesPickerContainer: {
-    marginTop: 2,
+    flexDirection:'row',
+    justifyContent:'center',
+    alignItems:'center'
   },
   inputLabel: {
     color: 'white',
-    marginBottom: 6,
+    marginBottom:4
   },
   amountInput: {
     backgroundColor: '#e0ffcd',
-    padding: 8,
+    padding: 6,
     borderRadius: 10,
-    fontSize: 20,
+    fontSize: 18,
     width: 120,
     marginRight: 10,
+    textAlign:'center'
   },
   pickerContainer: {
     marginTop: 2,
+    borderRadius:10,
+    flexDirection:'row',
+    flexWrap:'wrap',
+    justifyContent:'center'
   },
   inputRow: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems:'center'
   },
 });

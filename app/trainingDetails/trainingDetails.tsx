@@ -75,8 +75,7 @@ const sendTraining = async ({ trainingType, repsState, selectedExercise }: Train
   return (
     <View style={styles.detailsMainBox}>
         <View>
-            <Text style={styles.sectionTitle}>Dodaj trening</Text>
-            <Text style={[styles.sectionTitle, {fontSize:28}]}>{type ? trainingTitles[`${type}`]: 'Nieznany trening'}</Text>
+            <Text style={[styles.sectionTitle, {backgroundColor:'#cbf078', paddingHorizontal:8, paddingVertical:10, borderRadius:2, textShadowColor: 'rgba(0, 0, 0, 0.75)', textShadowOffset: { width: 1, height: 1 }, textShadowRadius: 4,}]}>Dodaj trening / {type ? trainingTitles[`${type}`]: 'Nieznany trening'}</Text>
         </View>
         <View style={styles.calendarSection}>
           <Text style={{color:'white', marginRight:10}}>Wybierz datę</Text>
@@ -156,12 +155,12 @@ const styles = StyleSheet.create({
       borderWidth:1,
       borderColor:'gray',
       borderRadius:10,
-      padding:12,
+      padding:10,
       backgroundColor:'#222831'
     },
     calendarButton:{
       backgroundColor:'#cbf078', 
-      padding:12,
+      padding:10,
       marginRight:24,
       borderRadius:50
     },

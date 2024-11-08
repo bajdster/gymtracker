@@ -74,7 +74,7 @@ const HistoryShort: React.FC = () => {
 
   if (trainings.length <= 0) {
     return (
-      <View style={{ width: '100%', marginTop: 20, padding: 4, backgroundColor: '#181c22', borderRadius: 10 }}>
+      <View style={{ width: '100%', marginTop: 20, paddingVertical: 10, paddingHorizontal:8, backgroundColor: '#181c22', borderRadius: 10 }}>
         <Text style={styles.sectionTitle}>Ostatnie treningi</Text>
         <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', marginTop: 20 }}>Nie masz jeszcze dodanych żadnych treningów</Text>
         <Text style={{ color: 'white', marginTop: 10 }}>Dodaj trening wybierając kategorię treningu powyżej</Text>
