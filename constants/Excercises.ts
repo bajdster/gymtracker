@@ -20,20 +20,18 @@ const exercises:{} = {
       "Arnoldki -  wyciskanie hantli nad głowę z rotacją",
       "Unoszenie hantli w bok",
       "Unoszenie hantli nad głowę klasyczne",
-      "Wyciskanie sztangi na maszynie smitha siedząc"
+      "Wyciskanie sztangi na maszynie siedząc"
     ],
     triceps: [
         "Wyciskanie sztangi francuskie w leżeniu",
         "Wyciskanie hantli francuskie w leżeniu",
         "Prostowanie ramion z linką wyciągu górnego",
         "Pompki na poręczach",
-        "Pompki w podporze tyłem",
         "Prostowanie ręki z hantlem w podparciu o ławkę"
     ],
     legs: [
       "Przysiady ze sztangą/hantlem",
       "Wykroki z hantlami",
-      "Martwy ciąg",
       "Wypychanie suwnicy leżąc",
       "Wyprosty kolan na maszynie siedząc",
       "Przywodzenie/Odwodzenie nóg na maszynie",
@@ -82,6 +80,33 @@ const exercises:{} = {
     "Wiosłowanie hantlami": require("../assets/images/wioslowanie_hantlami.png"),
     "Wiosłowanie końcem sztangi w opadzie tułowia": require("../assets/images/wioslowanie_koncem_sztangi.png"),
     "Przyciąganie linki wyciągu siedząc": require("../assets/images/przyciaganie_linki_wyciagu.png"),
+
+    "Wyciskanie sztangi nad głowę stojąc": require("../assets/images/wyciskanie_zolnierskie.png"),
+    "Arnoldki -  wyciskanie hantli nad głowę z rotacją": require("../assets/images/arnoldki.png"),
+    "Unoszenie hantli w bok": require("../assets/images/unoszenie_hantli_na_boki.png"),
+    "Unoszenie hantli nad głowę klasyczne": require("../assets/images/unoszenie_hantli_klasyczne.png"),
+    "Wyciskanie sztangi na maszynie siedząc": require("../assets/images/wyciskanie_sztangi_na_maszynie.png"),
+
+    "Wyciskanie sztangi francuskie w leżeniu": require("../assets/images/wyciskanie_francuskie_sztangi.png"),
+    "Wyciskanie hantli francuskie w leżeniu": require("../assets/images/wyciskanie_francuskie_hantli.png"),
+    "Prostowanie ramion z linką wyciągu górnego": require("../assets/images/linka_wyciagu_gornego.png"),
+    "Pompki na poręczach": require("../assets/images/dipy.png"),
+    "Prostowanie ręki z hantlem w podparciu o ławkę": require("../assets/images/podparcie_o_lawke.png"),
+
+    "Przysiady ze sztangą/hantlem": require("../assets/images/przysiady_ze_sztanga.png"),
+    "Wykroki z hantlami": require("../assets/images/wykroki_z_hantlami.png"),
+    "Wypychanie suwnicy leżąc": require("../assets/images/suwnica_lezac.png"),
+    "Wyprosty kolan na maszynie siedząc": require("../assets/images/wyprosty_kolan.png"),
+    "Przywodzenie/Odwodzenie nóg na maszynie": require("../assets/images/przywodzenie.png"),
+    "Żuraw": require("../assets/images/zuraw.png"),
+    "Wnosy na łydkach": require("../assets/images/lydki.png"),
+
+    "Unoszenie hantli stylem młotkowym": require("../assets/images/mlotkowe_hantle.png"),
+    "Modlitewnik ze sztangą": require("../assets/images/modlitewnik_sztanga.png"),
+    "Modlitewnik na maszynie": require("../assets/images/modlitewnik_maszyna.png"),
+    "Wznosy hantli z rotacją siedząc":  require("../assets/images/wznosy_hantli_siedzac.png"),
+    "Zginanie ramion ze sztangą łamaną stojąc": require("../assets/images/sztanga_lamana_stojac.png"),
+    "Zginanie przedramion z drążkiem wyciągu dolnego": require("../assets/images/wyciag_dolny.png"),
   };
   
 

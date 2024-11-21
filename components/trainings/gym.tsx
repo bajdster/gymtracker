@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import exercises from '@/constants/Excercises';
 import { Picker } from '@react-native-picker/picker';
 import AddTrainingButton from '../addTrainingButton';
-import { Video } from 'expo-av';
 import { imagesSources } from '@/constants/Excercises';
 
 interface GymProps {
@@ -19,19 +18,27 @@ interface trainingDetails {
 
 const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler }) => {
   const [seriesCount, setSeriesCount] = useState<string>('4');
-  const [repsState, setRepsState] = useState<{ reps: string; weight: string }[]>([{ reps: '8', weight: '' }, { reps: '8', weight: '' }, { reps: '8', weight: '' }, { reps: '8', weight: '' }]);
+  const [repsState, setRepsState] = useState<{ reps: string; weight: string }[]>([
+    { reps: '8', weight: '' }, { reps: '8', weight: '' }, { reps: '8', weight: '' }, { reps: '8', weight: '' }
+  ]);
 
   const availableExercises: string[] = exercises[trainingType] || []; 
   const [selectedExercise, setSelectedExercise] = useState<string>(availableExercises[0] || ''); 
   const [imageSource, setImageSource] = useState(null);
+  const [isImageLoading, setIsImageLoading] = useState<Boolean>(false);
 
   useEffect(() => {
-    setImageSource(getImageSource(selectedExercise));
-    console.log(imageSource)
+    const loadImage = async () => {
+      setIsImageLoading(true);
+      const source = await getImageSource(selectedExercise);
+      setImageSource(source);
+      setIsImageLoading(false);
+    };
+
+    loadImage();
   }, [selectedExercise]);
 
-
-  const getImageSource = (exerciseName: string) => {
+  const getImageSource = async (exerciseName: string) => {
     return imagesSources[exerciseName] || null;
   };
 
@@ -72,7 +79,6 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler }) => {
       selectedExercise
     });
   };
-  
 
   return (
     <KeyboardAvoidingView
@@ -81,61 +87,67 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler }) => {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
     >
       <ScrollView>
-        <View style={styles.excerciseAmountInputsContainer}>
-          <View>
-            <Picker
-              dropdownIconColor="#cbf078"
-              style={{ backgroundColor: 'black', width: 250 }}
-              selectedValue={selectedExercise}
-              onValueChange={(itemValue) => setSelectedExercise(itemValue)}
-            >
-              {availableExercises.map((exercise) => (
-                <Picker.Item
-                  label={exercise}
-                  value={exercise}
-                  style={{ backgroundColor: 'black', color: 'white' }}
-                  key={exercise}
-                />
-              ))}
-            </Picker>
-          </View>
+        <View style={{ flexDirection: 'row', marginTop: 10 }}>
+          <View style={styles.excerciseAmountInputsContainer}>
+            <View>
+              <Picker
+                dropdownIconColor="#cbf078"
+                style={{ backgroundColor: 'black', width: 220 }}
+                selectedValue={selectedExercise}
+                onValueChange={(itemValue) => setSelectedExercise(itemValue)}
+              >
+                {availableExercises.map((exercise) => (
+                  <Picker.Item
+                    label={exercise}
+                    value={exercise}
+                    style={{ backgroundColor: 'black', color: 'white', fontSize: 12 }}
+                    key={exercise}
+                  />
+                ))}
+              </Picker>
+            </View>
 
-          <View style={styles.seriesPickerContainer}>
-            <Text style={styles.inputLabel}>Ilość serii</Text>
-            <Picker
-              dropdownIconColor="#cbf078"
-              style={{ backgroundColor: 'black', width: 90 }}
-              selectedValue={seriesCount}
-              onValueChange={(itemValue) => handleSeriesCountChange(itemValue)}
-            >
-              {[...Array(5)].map((_, i) => (
-                <Picker.Item
-                  label={`${i + 1}`}
-                  value={`${i + 1}`}
-                  style={{ backgroundColor: 'black', color: 'white' }}
-                  key={i}
-                />
-              ))}
-            </Picker>
+            <View style={styles.seriesPickerContainer}>
+              <Text style={[styles.inputLabel, {fontSize:12}]}>Ilość serii</Text>
+              <Picker
+                dropdownIconColor="#cbf078"
+                style={{ backgroundColor: 'black', width: 90 }}
+                selectedValue={seriesCount}
+                onValueChange={(itemValue) => handleSeriesCountChange(itemValue)}
+              >
+                {[...Array(5)].map((_, i) => (
+                  <Picker.Item
+                    label={`${i + 1}`}
+                    value={`${i + 1}`}
+                    style={{ backgroundColor: 'black', color: 'white' }}
+                    key={i}
+                  />
+                ))}
+              </Picker>
+            </View>
+          </View>
+          
+          <View style={{ width: '50%', alignItems: 'center', marginVertical: 10 }}>
+            {isImageLoading ? (
+              <Text style={{ color: 'white' }}>Ładowanie obrazu...</Text>
+            ) : imageSource ? (
+              <Image
+                source={imageSource} // Bezpośrednie przypisanie obrazu
+                style={{ width: 120, height: 120 }}
+                resizeMode="cover"
+              />
+            ) : (
+              <Text style={styles.inputLabel}>Brak obrazu dla tego ćwiczenia</Text>
+            )}
           </View>
         </View>
-        <View style={{width: '100%', alignItems: 'center',  marginVertical: 10}}>
-        {imageSource ? (
-        <Image
-          source={imageSource} // Bezpośrednie przypisanie obrazu
-          style={{ width: 150, height: 150 }}
-          resizeMode="cover"
-        />
-        ) : (
-        <Text style={styles.inputLabel}>Brak obrazu dla tego ćwiczenia</Text>
-        )}
-        </View>
-
 
         <View style={styles.pickerContainer}>
           {Array.from({ length: parseInt(seriesCount, 10) }, (_, index) => (
             <View key={index} style={styles.excerciseDropdown}>
-              <Text style={[styles.inputLabel, { color:'white', fontWeight:'bold', textAlign:'center'}]}>Seria {index + 1}</Text>
+              <Text style={[styles.inputLabel, { color: 'white', fontWeight: 'bold', textAlign: 'center' }]}>
+                Seria {index + 1}
+              </Text>
               <View style={styles.inputRow}>
                 <View>
                   <Text style={styles.inputLabel}>Ilość powtórzeń</Text>
@@ -146,7 +158,7 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler }) => {
                     onChangeText={(value) => handleInputChange(index, 'reps', value)}
                   />
                 </View>
-                <View style={{marginTop:6}}>
+                <View style={{ marginTop: 6 }}>
                   <Text style={styles.inputLabel}>Ciężar (kg)</Text>
                   <TextInput
                     keyboardType="numeric"
@@ -159,6 +171,7 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler }) => {
             </View>
           ))}
         </View>
+        
         <AddTrainingButton onAddTraining={addTrainingHandler} />
       </ScrollView>
     </KeyboardAvoidingView>
@@ -170,25 +183,25 @@ export default Gym;
 const styles = StyleSheet.create({
   excerciseDropdown: {
     marginTop: 12,
-    backgroundColor:'#222831',
-    width:'45%',
-    padding:8,
-    marginLeft:10,
-    borderRadius:10
+    backgroundColor: '#222831',
+    width: '45%',
+    padding: 8,
+    marginLeft: 10,
+    borderRadius: 10,
   },
   excerciseAmountInputsContainer: {
     marginTop: 10,
-    flexDirection: 'row',
     justifyContent: 'space-evenly',
+    width: '55%',
   },
   seriesPickerContainer: {
-    flexDirection:'row',
-    justifyContent:'center',
-    alignItems:'center'
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   inputLabel: {
     color: 'white',
-    marginBottom:4
+    marginBottom: 4,
   },
   amountInput: {
     backgroundColor: '#e0ffcd',
@@ -197,17 +210,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     width: 120,
     marginRight: 10,
-    textAlign:'center'
+    textAlign: 'center',
   },
   pickerContainer: {
     marginTop: 2,
-    borderRadius:10,
-    flexDirection:'row',
-    flexWrap:'wrap',
-    justifyContent:'center'
+    borderRadius: 10,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
   },
   inputRow: {
     justifyContent: 'space-between',
-    alignItems:'center'
+    alignItems: 'center',
   },
 });

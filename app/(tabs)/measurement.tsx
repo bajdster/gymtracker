@@ -47,7 +47,6 @@ const Measurement: React.FC = () => {
       setIsLoading(true);
       const response = await fetchAllMeasurements();
       
-      console.log('Fetched measurements:', response); // Dodaj log tutaj
   
       if (Array.isArray(response) && response.length > 0) {
         const reversedResponse = response.reverse();
@@ -57,7 +56,6 @@ const Measurement: React.FC = () => {
           ? reversedResponse[0] 
           : null;
   
-        console.log('Latest measurement:', latestMeasurement); // Dodaj log tutaj
   
         if (latestMeasurement) {
           setFetchedMeasurement({
@@ -172,7 +170,7 @@ const Measurement: React.FC = () => {
             </TouchableOpacity>
           </View>
 
-            <View style={{backgroundColor:'#181c22', borderRadius:10,}}>
+            <View style={{backgroundColor:'#181c22', borderRadius:10, padding:6}}>
               <Text style={styles.measureLabel}>Ostatni pomiar {fetchedMeasurement && fetchedMeasurement.date}</Text>
               <View style={styles.measurementsStats}>
                 {fetchedMeasurement && Object.keys(fetchedMeasurement).length > 0 ? Object.keys(fetchedMeasurement)
@@ -186,7 +184,7 @@ const Measurement: React.FC = () => {
               </View>
             </View>
           <Text style={styles.measureLabel}>Dane podstawowe</Text>
-          <View style={[styles.inputRow,{backgroundColor:'#181c22', borderRadius:10,}]}>
+          <View style={[styles.inputRow,{backgroundColor:'#181c22', borderRadius:10, padding:6}]}>
             <View>
               <Text style={styles.inputLabel}>Wzrost (cm)</Text>
               <TextInput
@@ -361,6 +359,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor:'#181c22', 
     borderRadius:10,
+    padding:6
   },
   inputLabel: {
     color: 'white',

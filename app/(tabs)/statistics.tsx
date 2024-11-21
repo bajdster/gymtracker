@@ -1,11 +1,13 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { fetchAllMeasurements, fetchAllTrainings } from '@/lib/trainingManagement';
-import { LineChart } from 'react-native-chart-kit';
+// import { LineChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
 import { getTrainingsNames } from '@/constants/Excercises';
 import { Picker } from '@react-native-picker/picker';
 import measurementNames from '@/constants/Measurements';
+import TrainingsCalendar from '@/components/Calendar';
+
 
 const Statistics = () => {
   interface RepsState {
@@ -132,12 +134,21 @@ const Statistics = () => {
 
   const selectedMeasurement = getMeasurementForDate(selectedMeasurementDate); // Filtrowanie wybranego pomiaru
 
-  console.log(selectedMeasurement)
+  console.log(allTrainings)
+  console.log(filteredTrainings)
+  //dodać filtrowanie po dacie i dodawanie do jedego wora wszystkich treninigów z danej daty do wyświetlenia w kalndarzu
+
   return (
     <ScrollView style={styles.homeMainBox}>
+
+      
+
       <View style={styles.homePageSection}>
         <Text style={styles.sectionTitle}>Statystyki</Text>
       </View>
+
+      <TrainingsCalendar/>
+
       <View style={{ borderWidth: 1, borderColor: 'white', padding: 8, borderRadius: 10, backgroundColor:'#181c22' }}>
         <View style={{ marginBottom: 10, borderBottomColor: 'white', borderBottomWidth: 1 }}>
           <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', marginBottom: 4 }}>Treningi</Text>
@@ -172,7 +183,8 @@ const Statistics = () => {
           ))}
         </View>
 
-        <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
+
+        {/* <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
           {data ? (
             <LineChart
               data={data}
@@ -197,7 +209,7 @@ const Statistics = () => {
           ) : (
             <Text style={{ color: 'white' }}>Ładowanie danych...</Text>
           )}
-        </View>
+        </View> */}
       </View>
 
       {/* Nowa sekcja dla pomiarów ciała */}
@@ -243,6 +255,8 @@ const Statistics = () => {
           <Text style={{ color: 'white', marginTop: 10 }}>Wybierz datę pomiarów, aby zobaczyć szczegóły.</Text>
         )}
       </View>
+
+
     </ScrollView>
   );
 };
