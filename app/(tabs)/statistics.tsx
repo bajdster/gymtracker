@@ -6,7 +6,7 @@ import { Dimensions } from 'react-native';
 import { getTrainingsNames } from '@/constants/Excercises';
 import { Picker } from '@react-native-picker/picker';
 import measurementNames from '@/constants/Measurements';
-import TrainingsCalendar from '@/components/Calendar';
+import TrainingsCalendar from '@/app/(tabs)/Calendar';
 
 
 const Statistics = () => {
@@ -29,7 +29,6 @@ const Statistics = () => {
     chest: number;
     waist: number;
     hips: number;
-    // Dodaj inne parametry pomiarów według potrzeb
   }
 
   const [allTrainings, setAllTrainings] = useState<Training[]>([]);
@@ -134,11 +133,11 @@ const Statistics = () => {
 
   const selectedMeasurement = getMeasurementForDate(selectedMeasurementDate); // Filtrowanie wybranego pomiaru
 
-  console.log(allTrainings)
-  console.log(filteredTrainings)
-  //dodać filtrowanie po dacie i dodawanie do jedego wora wszystkich treninigów z danej daty do wyświetlenia w kalndarzu
+  // console.log(allTrainings)
+  // console.log(filteredTrainings)
 
   return (
+    <>
     <ScrollView style={styles.homeMainBox}>
 
       
@@ -147,7 +146,7 @@ const Statistics = () => {
         <Text style={styles.sectionTitle}>Statystyki</Text>
       </View>
 
-      <TrainingsCalendar/>
+
 
       <View style={{ borderWidth: 1, borderColor: 'white', padding: 8, borderRadius: 10, backgroundColor:'#181c22' }}>
         <View style={{ marginBottom: 10, borderBottomColor: 'white', borderBottomWidth: 1 }}>
@@ -182,34 +181,6 @@ const Statistics = () => {
             </View>
           ))}
         </View>
-
-
-        {/* <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
-          {data ? (
-            <LineChart
-              data={data}
-              width={screenWidth * 0.9}
-              height={220}
-              fromZero={true}
-              yAxisInterval={1}
-              chartConfig={{
-                backgroundColor: '#cbf078',
-                backgroundGradientFrom: '#4c9173',
-                backgroundGradientTo: '#a2c11c',
-                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                strokeWidth: 2,
-                decimalPlaces: 0,
-                propsForLabels: {
-                  fontSize: 10,
-                  fill: '#ffffff',
-                  fontWeight: 'bold',
-                },
-              }}
-            />
-          ) : (
-            <Text style={{ color: 'white' }}>Ładowanie danych...</Text>
-          )}
-        </View> */}
       </View>
 
       {/* Nowa sekcja dla pomiarów ciała */}
@@ -258,6 +229,7 @@ const Statistics = () => {
 
 
     </ScrollView>
+    </>
   );
 };
 

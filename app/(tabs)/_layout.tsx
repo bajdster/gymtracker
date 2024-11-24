@@ -61,6 +61,16 @@ export default function TabLayout() {
             ),
           }}
         />
+        <Tabs.Screen
+          name="Calendar"
+          options={{
+            title: 'Kalendarz',
+            headerShown:false,
+            tabBarIcon: ({ color, focused }) => (
+              <AntDesign name="calendar" size={24} color={color} />
+            ),
+          }}
+        />
       </Tabs>
     </>
   );
