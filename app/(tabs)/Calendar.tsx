@@ -1,7 +1,7 @@
 import { Agenda } from 'react-native-calendars';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LocaleConfig } from 'react-native-calendars';
-import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, TouchableOpacity, StyleSheet, View } from 'react-native';
 import { fetchAllTrainings } from '@/lib/trainingManagement';
 import { useState, useEffect } from 'react';
 
@@ -18,7 +18,8 @@ const TrainingsCalendar = () => {
   const [isLoading, setIsLoading] = useState<Boolean>(true);
   const [agendaItems, setAgendaItems] = useState<{ [date: string]: any[] }>({});
 
-  const getAllTrainings = async () => {
+  const getAllTrainings = async () => 
+  {
     setIsLoading(true);
     const response = await fetchAllTrainings();
 
@@ -72,14 +73,20 @@ const TrainingsCalendar = () => {
 
   LocaleConfig.defaultLocale = 'pl';
 
+  console.log(agendaItems)
+
   return (
-    <SafeAreaView style={{ marginBottom: 10, flex: 1 }}>
+    <SafeAreaView style={{flex: 1,}}>
+      <View style={styles.homePageSection}>
+        <Text style={styles.sectionTitle}>Kalendarz treningów</Text>
+      </View>
       <Agenda
         style={{
           borderWidth: 1,
-          borderColor: 'white',
+          borderColor: 'black',
           borderRadius: 10,
           height: 400,
+          marginBottom:10
         }}
         theme={{
           backgroundColor: '#000000',
@@ -93,11 +100,17 @@ const TrainingsCalendar = () => {
           agendaKnobColor: '#cbf078',
         }}
         items={agendaItems}
+        showOnlySelectedDayItems={true}
         renderItem={(item, isFirst) => (
           <TouchableOpacity style={{ backgroundColor: 'gray', padding: 10, borderRadius: 5, marginRight: 5, marginTop: 5 }}>
             <Text style={{ color: 'white', fontWeight: 'bold' }}>{item.name}</Text>
             <Text style={{ color: 'white' }}>{item.data}</Text>
           </TouchableOpacity>
+        )}
+        renderEmptyData={() => (
+          <View style={styles.emptyDate}>
+            <Text style={styles.emptyDateText}>W wybranym dniu nie ma żadnego dodanego treningu</Text>
+          </View>
         )}
       />
     </SafeAreaView>
@@ -106,4 +119,25 @@ const TrainingsCalendar = () => {
 
 export default TrainingsCalendar;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  homePageSection: {
+    width: '100%',
+  },
+  sectionTitle: {
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold',
+    padding: 4,
+  },
+    emptyDate: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+  },
+  emptyDateText: {
+    color: 'gray',
+    fontSize: 16,
+    fontStyle: 'italic',
+  },
+});
