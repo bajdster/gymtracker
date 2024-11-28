@@ -74,18 +74,20 @@ const TrainingsCalendar = () => {
   LocaleConfig.defaultLocale = 'pl';
 
   console.log(agendaItems)
+  console.log(allTrainings)
 
   return (
-    <SafeAreaView style={{flex: 1,}}>
+    <View style={{flex: 1, paddingHorizontal:8}}>
       <View style={styles.homePageSection}>
         <Text style={styles.sectionTitle}>Kalendarz treningów</Text>
+        <Text style={styles.description}>Dodane treningi oznaczone będa kropką pod danym dniem</Text>
       </View>
       <Agenda
         style={{
           borderWidth: 1,
           borderColor: 'black',
           borderRadius: 10,
-          height: 400,
+          height: 450,
           marginBottom:10
         }}
         theme={{
@@ -102,8 +104,8 @@ const TrainingsCalendar = () => {
         items={agendaItems}
         showOnlySelectedDayItems={true}
         renderItem={(item, isFirst) => (
-          <TouchableOpacity style={{ backgroundColor: 'gray', padding: 10, borderRadius: 5, marginRight: 5, marginTop: 5 }}>
-            <Text style={{ color: 'white', fontWeight: 'bold' }}>{item.name}</Text>
+          <TouchableOpacity style={{ backgroundColor: '#1d1716', padding: 10, borderRadius: 5, marginRight: 5, marginTop: 5 }}>
+            <Text style={{ color: 'white', fontWeight: 'bold', marginBottom:2 }}>{item.name}</Text>
             <Text style={{ color: 'white' }}>{item.data}</Text>
           </TouchableOpacity>
         )}
@@ -113,7 +115,7 @@ const TrainingsCalendar = () => {
           </View>
         )}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -140,4 +142,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontStyle: 'italic',
   },
+  description:
+  {
+    fontSize:11,
+    color:'#f7f7f7',
+    paddingHorizontal: 4,
+  }
 });

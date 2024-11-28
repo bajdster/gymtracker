@@ -144,6 +144,7 @@ const Statistics = () => {
 
       <View style={styles.homePageSection}>
         <Text style={styles.sectionTitle}>Statystyki</Text>
+        <Text style={styles.description}>Sprawdź swoje postępy w treningach oraz pomiarach ciała</Text>
       </View>
 
 
@@ -248,7 +249,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     padding: 4,
-    marginBottom: 10,
+
   },
   trainingsStats: {
     flexDirection: 'row',
@@ -270,4 +271,11 @@ const styles = StyleSheet.create({
   measurementStats: {
     marginTop: 10,
   },
+  description:
+  {
+    fontSize:11,
+    color:'#f7f7f7',
+    padding: 4,
+    marginBottom: 10,
+  }
 });
