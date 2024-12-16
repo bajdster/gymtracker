@@ -6,28 +6,44 @@ import AddTrainingButton from '../addTrainingButton';
 import { imagesSources } from '@/constants/Excercises';
 
 interface GymProps {
-  trainingType: string,
-  onSendHandler: (trainingDetails: trainingDetails) => void
+  trainingType: string;
+  onSendHandler: (trainingDetails: trainingDetails) => void;
+  initialItem?: trainingDetails;
 }
 
 interface trainingDetails {
   trainingType: string;
-  repsState: { reps: string; weight: string }[],
-  selectedExercise: string
+  repsState: { reps: string; weight: string }[];
+  selectedExercise: string;
 }
 
-const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler }) => {
+const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler, initialItem }) => {
   const [seriesCount, setSeriesCount] = useState<string>('4');
   const [repsState, setRepsState] = useState<{ reps: string; weight: string }[]>([
-    { reps: '8', weight: '' }, { reps: '8', weight: '' }, { reps: '8', weight: '' }, { reps: '8', weight: '' }
+    { reps: '8', weight: '' },
+    { reps: '8', weight: '' },
+    { reps: '8', weight: '' },
+    { reps: '8', weight: '' },
   ]);
-
-  const availableExercises: string[] = exercises[trainingType] || []; 
-  const [selectedExercise, setSelectedExercise] = useState<string>(availableExercises[0] || ''); 
+  const [selectedExercise, setSelectedExercise] = useState<string>('');
   const [imageSource, setImageSource] = useState(null);
   const [isImageLoading, setIsImageLoading] = useState<Boolean>(false);
 
+  const availableExercises: string[] = exercises[trainingType] || [];
+
+
   useEffect(() => {
+    if (initialItem) {
+      setSeriesCount(initialItem.repsState.length.toString());
+      setRepsState(initialItem.repsState);
+      setSelectedExercise(initialItem.selectedExercise || availableExercises[0] || '');
+    } else if (availableExercises.length > 0) {
+      setSelectedExercise(availableExercises[0]);
+    }
+  }, [initialItem, availableExercises]);
+
+  useEffect(() => {
+
     const loadImage = async () => {
       setIsImageLoading(true);
       const source = await getImageSource(selectedExercise);
@@ -35,7 +51,9 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler }) => {
       setIsImageLoading(false);
     };
 
-    loadImage();
+    if (selectedExercise) {
+      loadImage();
+    }
   }, [selectedExercise]);
 
   const getImageSource = async (exerciseName: string) => {
@@ -70,13 +88,13 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler }) => {
   const addTrainingHandler = () => {
     const hasEmptyFields = repsState.some((series) => !series.reps || !series.weight);
     if (hasEmptyFields) {
-      Alert.alert("Proszę uzupełnić dane treningu", "Należy uzupełnić ilość powtórzeń i ciężar");
+      Alert.alert('Proszę uzupełnić dane treningu', 'Należy uzupełnić ilość powtórzeń i ciężar');
       return;
     }
     onSendHandler({
       trainingType,
       repsState,
-      selectedExercise
+      selectedExercise,
     });
   };
 
@@ -108,7 +126,7 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler }) => {
             </View>
 
             <View style={styles.seriesPickerContainer}>
-              <Text style={[styles.inputLabel, {fontSize:12}]}>Ilość serii</Text>
+              <Text style={[styles.inputLabel, { fontSize: 12 }]}>Ilość serii</Text>
               <Picker
                 dropdownIconColor="#cbf078"
                 style={{ backgroundColor: 'black', width: 90 }}
@@ -126,13 +144,13 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler }) => {
               </Picker>
             </View>
           </View>
-          
+
           <View style={{ width: '50%', alignItems: 'center', marginVertical: 10 }}>
             {isImageLoading ? (
               <Text style={{ color: 'white' }}>Ładowanie obrazu...</Text>
             ) : imageSource ? (
               <Image
-                source={imageSource} // Bezpośrednie przypisanie obrazu
+                source={imageSource}
                 style={{ width: 120, height: 120 }}
                 resizeMode="cover"
               />
@@ -171,8 +189,8 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler }) => {
             </View>
           ))}
         </View>
-        
-        <AddTrainingButton onAddTraining={addTrainingHandler} />
+
+        <AddTrainingButton onAddTraining={addTrainingHandler} title={initialItem? "Edytuj" : 'Dodaj'} />
       </ScrollView>
     </KeyboardAvoidingView>
   );

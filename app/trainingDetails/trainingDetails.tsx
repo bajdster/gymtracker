@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Button, TouchableOpacity, Modal } from 'react-native'
+import { StyleSheet, Text, View, Button, TouchableOpacity, Modal, Alert } from 'react-native'
 import React, {useEffect, useState} from 'react'
 import { router, useLocalSearchParams } from 'expo-router'
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -6,7 +6,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Gym from '@/components/trainings/gym';
 import Calistenic from '@/components/trainings/calistenic';
 import Running from '@/components/trainings/running';
-import { sendTrainingToDB} from '@/lib/trainingManagement';
+import { sendTrainingToDB, updateTrainingToDB} from '@/lib/trainingManagement';
 
 const TrainingDetails = () => {
 
@@ -17,7 +17,7 @@ const TrainingDetails = () => {
     selectedExercise:string
   }
 
-  const {type} = useLocalSearchParams()
+  const { type, trainingItem } = useLocalSearchParams();
   const trainingTitles:{[key: string]:string} = {
     chest: 'Klatka',
     back: 'Plecy',
@@ -35,6 +35,9 @@ const TrainingDetails = () => {
   const [show, setShow] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const [initialData, setInitialData] = useState(null);
+
+  const isEditMode = Boolean(trainingItem);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -46,10 +49,20 @@ const TrainingDetails = () => {
     setShow(true);
   };
 
-  useEffect(()=>
-{
-    console.log(date.toUTCString())
-}, [date])
+useEffect(() => {
+
+  if (isEditMode) {
+    try {
+      const deserializedItem = JSON.parse(decodeURIComponent(trainingItem));
+      setInitialData(deserializedItem);
+      if (deserializedItem.date) {
+        setDate(new Date(deserializedItem.date));
+      }
+    } catch (error) {
+      console.error('Error parsing trainingItem:', error);
+    }
+  }
+}, [trainingItem]);
 
 const sendTraining = async ({ trainingType, repsState, selectedExercise }: TrainingDetails): Promise<void> => {
   const formattedDate = date.toISOString().split('T')[0];
@@ -71,6 +84,25 @@ const sendTraining = async ({ trainingType, repsState, selectedExercise }: Train
   }
 };
 
+const updateTraining = async ({ trainingType, repsState, selectedExercise}: TrainingDetails): Promise<void> => {
+  const formattedDate = new Date().toISOString().split('T')[0];
+
+  try {
+    await updateTrainingToDB(initialData?.id, {
+      date: initialData.date, 
+      trainingType,
+      repsState,
+      selectedExercise,
+    });
+
+    setModalMessage('Trening edytowany pomyślnie!');
+    setModalVisible(true);
+  } catch (error) {
+    setModalMessage('Wystąpił błąd podczas edytowania treningu.');
+    setModalVisible(true);
+  }
+}
+
 
   return (
     <View style={styles.detailsMainBox}>
@@ -84,11 +116,46 @@ const sendTraining = async ({ trainingType, repsState, selectedExercise }: Train
           </TouchableOpacity>
           <Text style={styles.calendarDate}>{date.toLocaleDateString()}</Text>
         </View>
-        <View style={{flex:1}}>
+        {isEditMode ? (
+            <View style={{flex:1}}>
+              <View style={{
+                  borderWidth: 1,
+                  borderBottomColor: 'white',
+                  padding: 10,
+                  width:'40%',
+                }}>
+                  <Text style={{
+                    color: 'lightgray', 
+                    fontSize: 12,
+                  }}>
+                    Edycja treningu
+                  </Text>
+                </View>
+            {(type=== 'chest' || type === 'back' || type==="shoulder" || type==="triceps" || type==="legs" || type ==='biceps') && <Gym trainingType={type} onSendHandler={updateTraining} initialItem={initialData}/>}
+            {(type ==='abs' || type ==='pullups' )&& <Calistenic trainingType={type} onSendHandler={updateTraining}/>}
+            {type ==='running' && <Running trainingType={type} onSendHandler={updateTraining}/>}
+          </View>
+        ): (
+          <View style={{flex:1}}>
+            <View style={{
+              borderWidth: 1,
+              borderBottomColor: 'white',
+              padding: 10,
+              width:'40%'
+            }}>
+              <Text style={{
+                color: 'lightgray', 
+                fontSize: 12,
+              }}>
+                Dodawanie treningu
+              </Text>
+            </View>
           {(type=== 'chest' || type === 'back' || type==="shoulder" || type==="triceps" || type==="legs" || type ==='biceps') && <Gym trainingType={type} onSendHandler={sendTraining}/>}
           {(type ==='abs' || type ==='pullups' )&& <Calistenic trainingType={type} onSendHandler={sendTraining}/>}
           {type ==='running' && <Running trainingType={type} onSendHandler={sendTraining}/>}
         </View>
+        )}
+       
 
 
         {show && (

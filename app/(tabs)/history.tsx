@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Modal, TextInput } from 'react-native';
 import { deleteTrainingFromDB, fetchAllTrainings } from '@/lib/trainingManagement';
 import { Collapsible } from '@/components/Collapsible';
+import { router } from 'expo-router';
 
 const History = () => {
   interface RepsState {
@@ -79,6 +80,18 @@ const History = () => {
     }
   };
 
+  const openEditModeHandler = (trainingType: string, item: Training) => {
+    try {
+      const serializedItem = encodeURIComponent(JSON.stringify(item));
+      router.push({
+        pathname: '/trainingDetails/trainingDetails',
+        params: { type: trainingType, trainingItem: serializedItem },
+      });
+    } catch (error) {
+      console.error('Error serializing item:', error);
+    }
+  };
+
   const renderItem = ({ item }: { item: Training }) => (
     <View style={{backgroundColor:'#222831', borderColor:'white', borderWidth:1, marginBottom:10}}>
       <Collapsible title={item.date} type={item.trainingType} selectedExcercise={item.selectedExercise}>
@@ -97,11 +110,20 @@ const History = () => {
             )}
           </View>
         ))}
-          <TouchableOpacity style={{ padding: 20 }} onPress={() => confirmDeleteHandler(item.id)} disabled={isDeleting}>
-            <Text style={{ color: 'red', position: 'absolute', right: 10, bottom: 10 }}>
-              {isDeleting ? 'Usuwanie...' : 'Usuń trening'}
-            </Text>
-          </TouchableOpacity>
+        <View style={{width:'100%', flexDirection:'row', justifyContent:'space-between'}}>
+          <TouchableOpacity style={{ padding: 20 }} onPress={() => openEditModeHandler(item.trainingType, item)}>
+              <Text style={{ color: '#f8f398' }}>
+                {"Edytuj"}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={{ padding: 20 }} onPress={() => confirmDeleteHandler(item.id)} disabled={isDeleting}>
+              <Text style={{ color: 'red' }}>
+                {isDeleting ? 'Usuwanie...' : 'Usuń trening'}
+              </Text>
+            </TouchableOpacity>
+        </View>
+
       </Collapsible>
     </View>
   );

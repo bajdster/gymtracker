@@ -47,6 +47,26 @@ export async function sendTrainingToDB(trainingData:trainingDetails)
 
 }
 
+export async function updateTrainingToDB(trainingId: string, trainingData: trainingDetails): Promise<void> {
+  try {
+    const response = await fetch(`https://gymtracker-c5f99-default-rtdb.firebaseio.com/trainings/${trainingId}.json`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(trainingData),
+    });
+
+    if (response.ok) {
+      console.log("Trening został zaktualizowany z ID: ", trainingId);
+    } else {
+      console.error("Błąd podczas aktualizowania treningu:", response.status);
+    }
+  } catch (error) {
+    console.error("Wystąpił błąd:", error);
+  }
+}
+
 export async function fetchHistoryShortTrainings()
 {
   const response = await fetch('https://gymtracker-c5f99-default-rtdb.firebaseio.com/trainings.json?orderBy=%22date%22&limitToLast=20');

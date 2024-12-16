@@ -2,13 +2,14 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 
 interface AddTrainingHandlerProps {
-    onAddTraining: ()=> void
+    onAddTraining: ()=> void,
+    title: string
 }
 
-const AddTrainingButton:React.FC<AddTrainingHandlerProps> = ({onAddTraining}) => {
+const AddTrainingButton:React.FC<AddTrainingHandlerProps> = ({onAddTraining, title}) => {
   return (
     <TouchableOpacity style={styles.addButton} onPress={onAddTraining}>
-        <Text style={styles.addButtonLabel}>Dodaj</Text>
+        <Text style={styles.addButtonLabel}>{title}</Text>
     </TouchableOpacity>
   )
 }
