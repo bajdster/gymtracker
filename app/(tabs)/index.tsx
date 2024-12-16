@@ -41,8 +41,9 @@ const styles = StyleSheet.create({
 // create separate file with types to implement DRY 
 
 //dodać sekcję "dzisiejszy trening, gdzie będzie jaie aprtie były ćwiczone, ile czasu zajeło, łączny ciężar, łączna ilośc serii itp"
-//edycja treninigów
+//edycja calistenics i running
 
+//edycja treninigów+
 //biblioteka ćwiczeń +
 //kalendarz +
 //dodać ikonki ćwiczeń (dłuższa sprawa z powodu przekształcenia całego pliku Excercises.ts) MuscleWiki, ExRx.net, lub Strength Level, Vecteezy lub Iconfinder,DALL-E +
