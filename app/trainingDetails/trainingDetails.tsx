@@ -107,7 +107,9 @@ const updateTraining = async ({ trainingType, repsState, selectedExercise}: Trai
   return (
     <View style={styles.detailsMainBox}>
         <View>
-            <Text style={[styles.sectionTitle, {backgroundColor:'#cbf078', paddingHorizontal:8, paddingVertical:10, borderRadius:2, textShadowColor: 'rgba(0, 0, 0, 0.75)', textShadowOffset: { width: 1, height: 1 }, textShadowRadius: 4,}]}>Dodaj trening / {type ? trainingTitles[`${type}`]: 'Nieznany trening'}</Text>
+            <Text style={[styles.sectionTitle, {backgroundColor:'#cbf078', paddingHorizontal:8, paddingVertical:10, borderRadius:2, textShadowColor: 'rgba(0, 0, 0, 0.75)', textShadowOffset: { width: 1, height: 1 }, textShadowRadius: 4,}]}>{!isEditMode? 'Dodaj trening' : 'Edytuj trening'} / {type ? trainingTitles[`${type}`]: 'Nieznany trening'}
+            </Text>
+            
         </View>
         <View style={styles.calendarSection}>
           <Text style={{color:'white', marginRight:10}}>Wybierz datę</Text>
@@ -118,38 +120,12 @@ const updateTraining = async ({ trainingType, repsState, selectedExercise}: Trai
         </View>
         {isEditMode ? (
             <View style={{flex:1}}>
-              <View style={{
-                  borderWidth: 1,
-                  borderBottomColor: 'white',
-                  padding: 10,
-                  width:'40%',
-                }}>
-                  <Text style={{
-                    color: 'lightgray', 
-                    fontSize: 12,
-                  }}>
-                    Edycja treningu
-                  </Text>
-                </View>
             {(type=== 'chest' || type === 'back' || type==="shoulder" || type==="triceps" || type==="legs" || type ==='biceps') && <Gym trainingType={type} onSendHandler={updateTraining} initialItem={initialData}/>}
             {(type ==='abs' || type ==='pullups' )&& <Calistenic trainingType={type} onSendHandler={updateTraining}/>}
             {type ==='running' && <Running trainingType={type} onSendHandler={updateTraining}/>}
           </View>
         ): (
           <View style={{flex:1}}>
-            <View style={{
-              borderWidth: 1,
-              borderBottomColor: 'white',
-              padding: 10,
-              width:'40%'
-            }}>
-              <Text style={{
-                color: 'lightgray', 
-                fontSize: 12,
-              }}>
-                Dodawanie treningu
-              </Text>
-            </View>
           {(type=== 'chest' || type === 'back' || type==="shoulder" || type==="triceps" || type==="legs" || type ==='biceps') && <Gym trainingType={type} onSendHandler={sendTraining}/>}
           {(type ==='abs' || type ==='pullups' )&& <Calistenic trainingType={type} onSendHandler={sendTraining}/>}
           {type ==='running' && <Running trainingType={type} onSendHandler={sendTraining}/>}

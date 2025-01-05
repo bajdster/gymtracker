@@ -4,6 +4,7 @@ import exercises from '@/constants/Excercises';
 import { Picker } from '@react-native-picker/picker';
 import AddTrainingButton from '../addTrainingButton';
 import { imagesSources } from '@/constants/Excercises';
+import { fetchAllTrainings } from '@/lib/trainingManagement';
 
 interface GymProps {
   trainingType: string;
@@ -28,6 +29,8 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler, initialItem }) =
   const [selectedExercise, setSelectedExercise] = useState<string>('');
   const [imageSource, setImageSource] = useState(null);
   const [isImageLoading, setIsImageLoading] = useState<Boolean>(false);
+  const [lastTrainingByExcercise, setLastTrainingByExcercise] = useState<Object>({})
+  const [activeSeriesIndex, setActiveSeriesIndex] = useState<number | null>(null);
 
   const availableExercises: string[] = exercises[trainingType] || [];
 
@@ -45,10 +48,12 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler, initialItem }) =
   useEffect(() => {
 
     const loadImage = async () => {
+      //here need to add last training by kind loading
       setIsImageLoading(true);
       const source = await getImageSource(selectedExercise);
       setImageSource(source);
       setIsImageLoading(false);
+      fetchLastTrainingByName(selectedExercise)
     };
 
     if (selectedExercise) {
@@ -59,6 +64,20 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler, initialItem }) =
   const getImageSource = async (exerciseName: string) => {
     return imagesSources[exerciseName] || null;
   };
+
+  const fetchLastTrainingByName = async (selectedExcercise:string) =>
+  {
+    try {
+      const allTrainings = await fetchAllTrainings();
+      const filteredTrainings = allTrainings
+        .filter(training => training.selectedExercise === selectedExercise)
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      setLastTrainingByExcercise(filteredTrainings[0])
+    } catch (error) {
+      console.error("Error fetching last training:", error);
+      return null;
+    }
+  }
 
   const handleSeriesCountChange = (value: string) => {
     setSeriesCount(value);
@@ -105,7 +124,7 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler, initialItem }) =
       keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
     >
       <ScrollView>
-        <View style={{ flexDirection: 'row', marginTop: 10 }}>
+        <View style={{ flexDirection: 'row', marginTop: 6 }}>
           <View style={styles.excerciseAmountInputsContainer}>
             <View>
               <Picker
@@ -162,7 +181,10 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler, initialItem }) =
 
         <View style={styles.pickerContainer}>
           {Array.from({ length: parseInt(seriesCount, 10) }, (_, index) => (
-            <View key={index} style={styles.excerciseDropdown}>
+            <View key={index} style={[
+              styles.excerciseDropdown,
+              activeSeriesIndex === index && { backgroundColor: '#3c4654' }
+            ]}>
               <Text style={[styles.inputLabel, { color: 'white', fontWeight: 'bold', textAlign: 'center' }]}>
                 Seria {index + 1}
               </Text>
@@ -174,6 +196,8 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler, initialItem }) =
                     style={styles.amountInput}
                     value={repsState[index]?.reps || ''}
                     onChangeText={(value) => handleInputChange(index, 'reps', value)}
+                    onFocus={() => setActiveSeriesIndex(index)}
+                    onBlur={() => setActiveSeriesIndex(null)}
                   />
                 </View>
                 <View style={{ marginTop: 6 }}>
@@ -183,15 +207,43 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler, initialItem }) =
                     style={styles.amountInput}
                     value={repsState[index]?.weight || ''}
                     onChangeText={(value) => handleInputChange(index, 'weight', value)}
+                    onFocus={() => setActiveSeriesIndex(index)}
+                    onBlur={() => setActiveSeriesIndex(null)}
                   />
                 </View>
               </View>
             </View>
           ))}
         </View>
+        {!initialItem && <View style={styles.lastExcerciseTraining}>
+          
+            <Text style={[styles.inputLabel, { color: 'white', fontWeight: 'bold'}]}>Ostatni trening <Text style={{color:'#cbf078'}}>{selectedExercise}</Text>
+            </Text>
+            
+          {lastTrainingByExcercise ? 
+          <View>
+            <Text style={{color:'white'}}>{lastTrainingByExcercise.date}</Text>
+            <View style={{flexDirection:'row', justifyContent:'space-between', marginTop:10}}>
+                {lastTrainingByExcercise && lastTrainingByExcercise.repsState ? (
+                lastTrainingByExcercise.repsState.map((series, index) => (
+                  <View key={index} style={{backgroundColor:"#222831", padding:6, alignItems:'center', justifyContent:'center', borderRadius:8}}>
+                    <Text style={{ color: 'white', fontWeight:'bold', marginBottom:4 }}>
+                      Seria {index + 1}:
+                    </Text>
+                    <Text style={{ color: 'white', fontSize:12 }}>Powtorz. {series.reps}</Text>
+                    <Text style={{ color: 'white', fontSize:12 }}>Ciężar: {series.weight} kg</Text>
+                  </View>
+                ))
+              ) : (
+                <Text style={{ color: 'white' }}>Brak danych dla ostatniego treningu</Text>
+              )}
+          </View>
 
-        <AddTrainingButton onAddTraining={addTrainingHandler} title={initialItem? "Edytuj" : 'Dodaj'} />
+          </View>: <Text style={{color:'white'}}>Brak ostatnich treninigów</Text>}
+        </View>}
+
       </ScrollView>
+        <AddTrainingButton onAddTraining={addTrainingHandler} title={initialItem? "Edytuj" : 'Dodaj'} />
     </KeyboardAvoidingView>
   );
 };
@@ -200,7 +252,7 @@ export default Gym;
 
 const styles = StyleSheet.create({
   excerciseDropdown: {
-    marginTop: 12,
+    marginTop: 6,
     backgroundColor: '#222831',
     width: '45%',
     padding: 8,
@@ -241,4 +293,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  lastExcerciseTraining:{
+    marginTop:10,
+    padding:10
+  }
 });

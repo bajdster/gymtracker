@@ -43,6 +43,8 @@ const styles = StyleSheet.create({
 //dodać sekcję "dzisiejszy trening, gdzie będzie jaie aprtie były ćwiczone, ile czasu zajeło, łączny ciężar, łączna ilośc serii itp"
 //edycja calistenics i running
 
+//dodanie kolorowania aktywnej serii+
+//dodanie ostatniego treningu pod wybranym treningiem w addTraining+
 //edycja treninigów+
 //biblioteka ćwiczeń +
 //kalendarz +

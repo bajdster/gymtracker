@@ -127,7 +127,7 @@ const Calistenic: React.FC<AbsProps> = ({trainingType, onSendHandler}) => {
             </View>
           ))}
         </View>
-          <AddTrainingButton onAddTraining={addTrainingHandler}/>
+          <AddTrainingButton onAddTraining={addTrainingHandler} title={"Dodaj"}/>
       </ScrollView>
     </KeyboardAvoidingView>
   );
