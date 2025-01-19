@@ -16,6 +16,7 @@ const History = () => {
     repsState: RepsState[];
     selectedExercise: string;
     trainingType: string;
+    rating:number
   }
 
   const [allTrainings, setAllTrainings] = useState<Training[]>([]);
@@ -93,8 +94,8 @@ const History = () => {
   };
 
   const renderItem = ({ item }: { item: Training }) => (
-    <View style={{backgroundColor:'#222831', borderColor:'white', borderWidth:1, marginBottom:10}}>
-      <Collapsible title={item.date} type={item.trainingType} selectedExcercise={item.selectedExercise}>
+    <View style={{backgroundColor:'#222831', borderColor:'white', borderWidth:1, marginBottom:10, flexDirection:'row'}}>
+      <Collapsible title={item.date} type={item.trainingType} selectedExcercise={item.selectedExercise} rating={item.rating}>
         {item.repsState.map((rep, index) => (
           <View key={index} style={styles.trainingDetails}>
             {item.trainingType === 'running' && (

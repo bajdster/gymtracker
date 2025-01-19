@@ -22,6 +22,11 @@ export default function TabLayout() {
           tabBarActiveTintColor: '#cbf078',
           tabBarInactiveTintColor: 'white',
           headerShown: false,
+          tabBarStyle:{
+            backgroundColor:'#16181c',
+            paddingBottom:5,
+            paddingTop:5,
+          }
         }}>
         <Tabs.Screen
           name="index"
@@ -30,12 +35,27 @@ export default function TabLayout() {
             tabBarIcon: ({ color, focused }) => (
               <AntDesign name="home" size={24} color={color} />
             ),
+            tabBarStyle:{
+              padding:10,
+              height:55,
+              borderRadius:12,
+              borderColor:'#222831',
+              borderTopWidth:1
+            }
           }}
+  
         />
         <Tabs.Screen
             name="history"
             options={{
               title: 'Historia',
+              tabBarStyle:{
+                padding:10,
+                height:55,
+                borderRadius:12,
+                borderColor:'#222831',
+                borderTopWidth:1
+              },
               headerShown:false,
               tabBarIcon: ({ color, focused }) => (
                 <FontAwesome name="history" size={24} color={color}/>
@@ -46,6 +66,13 @@ export default function TabLayout() {
             name="measurement"
             options={{
               title: 'Pomiary',
+              tabBarStyle:{
+                padding:10,
+                height:55,
+                borderRadius:12,
+                borderColor:'#222831',
+                borderTopWidth:1
+              },
               headerShown:false,
               tabBarIcon: ({ color, focused }) => (
                 <Entypo name="ruler" size={24} color={color} />
@@ -56,6 +83,13 @@ export default function TabLayout() {
           name="statistics"
           options={{
             title: 'Statystyki',
+            tabBarStyle:{
+              padding:10,
+              height:55,
+              borderRadius:12,
+              borderColor:'#222831',
+              borderTopWidth:1
+            },
             headerShown:false,
             tabBarIcon: ({ color, focused }) => (
               <Ionicons name="stats-chart-outline" size={24} color={color} />
@@ -66,6 +100,13 @@ export default function TabLayout() {
           name="Calendar"
           options={{
             title: 'Kalendarz',
+            tabBarStyle:{
+              padding:10,
+              height:55,
+              borderRadius:12,
+              borderColor:'#222831',
+              borderTopWidth:1
+            },
             headerShown:false,
             tabBarIcon: ({ color, focused }) => (
               <AntDesign name="calendar" size={24} color={color} />
@@ -76,6 +117,13 @@ export default function TabLayout() {
           name="Excercises"
           options={{
             title: 'Ćwiczenia',
+            tabBarStyle:{
+              padding:10,
+              height:55,
+              borderRadius:12,
+              borderColor:'#222831',
+              borderTopWidth:1
+            },
             headerShown:false,
             tabBarIcon: ({ color, focused }) => (
               <MaterialCommunityIcons name="arm-flex" size={24} color={color}/>

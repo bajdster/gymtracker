@@ -5,6 +5,7 @@ import { Picker } from '@react-native-picker/picker';
 import AddTrainingButton from '../addTrainingButton';
 import { imagesSources } from '@/constants/Excercises';
 import { fetchAllTrainings } from '@/lib/trainingManagement';
+import Rating from '../ratings';
 
 interface GymProps {
   trainingType: string;
@@ -16,6 +17,7 @@ interface trainingDetails {
   trainingType: string;
   repsState: { reps: string; weight: string }[];
   selectedExercise: string;
+  rating:number
 }
 
 const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler, initialItem }) => {
@@ -31,15 +33,21 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler, initialItem }) =
   const [isImageLoading, setIsImageLoading] = useState<Boolean>(false);
   const [lastTrainingByExcercise, setLastTrainingByExcercise] = useState<Object>({})
   const [activeSeriesIndex, setActiveSeriesIndex] = useState<number | null>(null);
+  const [rating, setRating] = useState<Number>(1);
 
   const availableExercises: string[] = exercises[trainingType] || [];
 
+    const changeRating = (rating:number) => 
+    { 
+      setRating(rating)
+    }
 
   useEffect(() => {
     if (initialItem) {
       setSeriesCount(initialItem.repsState.length.toString());
       setRepsState(initialItem.repsState);
       setSelectedExercise(initialItem.selectedExercise || availableExercises[0] || '');
+      setRating(initialItem.rating)
     } else if (availableExercises.length > 0) {
       setSelectedExercise(availableExercises[0]);
     }
@@ -114,6 +122,7 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler, initialItem }) =
       trainingType,
       repsState,
       selectedExercise,
+      rating
     });
   };
 
@@ -215,6 +224,9 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler, initialItem }) =
             </View>
           ))}
         </View>
+
+        <Rating ratingHandler={changeRating} currentState={rating}/>
+
         {!initialItem && <View style={styles.lastExcerciseTraining}>
           
             <Text style={[styles.inputLabel, { color: 'white', fontWeight: 'bold'}]}>Ostatni trening <Text style={{color:'#cbf078'}}>{selectedExercise}</Text>

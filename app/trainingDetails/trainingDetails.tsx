@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Button, TouchableOpacity, Modal, Alert } from 'react-native'
+import { StyleSheet, Text, View, Button, TouchableOpacity, Modal, Alert, Image } from 'react-native'
 import React, {useEffect, useState} from 'react'
 import { router, useLocalSearchParams } from 'expo-router'
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -14,7 +14,8 @@ const TrainingDetails = () => {
     date:string
     trainingType: string,
     repsState: [],
-    selectedExercise:string
+    selectedExercise:string,
+    rating:number
   }
 
   const { type, trainingItem } = useLocalSearchParams();
@@ -28,6 +29,14 @@ const TrainingDetails = () => {
     abs: 'Brzuch',
     pullups: 'Drążek',
     running: 'Bieganie'
+  }
+
+  const congratulation: string[] = ['Świetnie Ci idzie!', "Oby tak dalej!", "Robisz postępy!", "Super!", "Bardzo dobrze!"]
+
+  function getCongratulation()
+  {
+    const randomIndex = Math.floor(Math.random() * congratulation.length)
+    return congratulation[randomIndex]; 
   }
 
   const [date, setDate] = useState(new Date());
@@ -49,6 +58,7 @@ const TrainingDetails = () => {
     setShow(true);
   };
 
+
 useEffect(() => {
 
   if (isEditMode) {
@@ -64,19 +74,20 @@ useEffect(() => {
   }
 }, [trainingItem]);
 
-const sendTraining = async ({ trainingType, repsState, selectedExercise }: TrainingDetails): Promise<void> => {
+const sendTraining = async ({ trainingType, repsState, selectedExercise, rating }: TrainingDetails): Promise<void> => {
   const formattedDate = date.toISOString().split('T')[0];
   
   try {
+    // Ustaw wiadomość i pokaż modal
+    setModalMessage(`Trening ${selectedExercise} dodany pomyślnie!`);
+    setModalVisible(true);
     await sendTrainingToDB({
       date: formattedDate, 
       trainingType,
       repsState,
       selectedExercise,
+      rating
     });
-    // Ustaw wiadomość i pokaż modal
-    setModalMessage('Trening dodany pomyślnie!');
-    setModalVisible(true);
   } catch (error) {
     // Ustaw wiadomość o błędzie, jeśli potrzebne
     setModalMessage('Wystąpił błąd podczas dodawania treningu.');
@@ -84,7 +95,7 @@ const sendTraining = async ({ trainingType, repsState, selectedExercise }: Train
   }
 };
 
-const updateTraining = async ({ trainingType, repsState, selectedExercise}: TrainingDetails): Promise<void> => {
+const updateTraining = async ({ trainingType, repsState, selectedExercise, rating}: TrainingDetails): Promise<void> => {
   const formattedDate = new Date().toISOString().split('T')[0];
 
   try {
@@ -93,6 +104,7 @@ const updateTraining = async ({ trainingType, repsState, selectedExercise}: Trai
       trainingType,
       repsState,
       selectedExercise,
+      rating
     });
 
     setModalMessage('Trening edytowany pomyślnie!');
@@ -132,8 +144,6 @@ const updateTraining = async ({ trainingType, repsState, selectedExercise}: Trai
         </View>
         )}
        
-
-
         {show && (
         <DateTimePicker
           testID="dateTimePicker"
@@ -154,7 +164,10 @@ const updateTraining = async ({ trainingType, repsState, selectedExercise}: Trai
       }}>
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
+        <Image source={require("../../assets/images/wow.gif")} style={{ width: 70, height: 70}} />
+          <Text style={styles.callToAction}>{getCongratulation()}</Text>
           <Text style={styles.modalMessage}>{modalMessage}</Text>
+
           <TouchableOpacity
             style={styles.modalButton}
             onPress={() => {
@@ -169,7 +182,6 @@ const updateTraining = async ({ trainingType, repsState, selectedExercise}: Trai
 
     </View>
 
-    
   )
 }
 
@@ -220,7 +232,7 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      backgroundColor: 'rgba(0, 0, 0, 0.72)',
     },
     modalContent: {
       width: 300,
@@ -238,9 +250,18 @@ const styles = StyleSheet.create({
       backgroundColor: '#cbf078',
       padding: 10,
       borderRadius: 5,
+      width:100,
+      alignItems:'center',
+      marginTop:10
     },
     modalButtonText: {
       color: 'white',
       fontSize: 16,
     },
+    callToAction:{
+      color:'gray',
+      fontSize:20,
+      marginBottom:10,
+      fontWeight:'bold'
+    }
 })

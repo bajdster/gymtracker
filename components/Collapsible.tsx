@@ -3,8 +3,9 @@ import { PropsWithChildren, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import { trainings } from '@/constants/Excercises';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-export function Collapsible({ children, title, type, selectedExcercise }: PropsWithChildren & { title: string, type?:string, selectedExcercise?:string}) {
+export function Collapsible({ children, title, type, selectedExcercise, rating }: PropsWithChildren & { title: string, type?:string, selectedExcercise?:string, rating:number}) {
   const [isOpen, setIsOpen] = useState(false);
   const theme = useColorScheme() ?? 'light';
 
@@ -29,13 +30,18 @@ export function Collapsible({ children, title, type, selectedExcercise }: PropsW
         {type && <Text style={{ color: 'white', fontWeight: 'bold' }}>{title}</Text>}
         {type && selectedExcercise && (
           //combination with types ^ because of using collapsible defferent in history and historyShort
-          <View style={{ padding: 4, width: '70%', marginBottom: 10, borderRadius: 4 }}>
+          <View style={{ padding: 4, width: '64%', marginBottom: 10, borderRadius: 4}}>
             <Text style={{ color: 'white', fontWeight: 'bold' }}>{getTrainingText(type)}</Text>
             <Text style={{ color: 'white' }}>{selectedExcercise}</Text>
           </View>
         )}
+              {rating && 
+              <View style={{width:'10%', flexDirection:"row", alignItems:'center'}}>
+                <Text style={{ color: 'white', fontWeight: 'bold', marginRight:1}}>{rating? rating : ''}</Text>
+                  <Icon name="star" size={10} color={'gold'}/>
+              </View>}
+                    
       </TouchableOpacity>
-
       {isOpen && <View style={styles.content}>{children}</View>}
     </View>
   );
