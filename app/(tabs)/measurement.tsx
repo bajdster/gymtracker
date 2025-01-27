@@ -289,7 +289,7 @@ const Measurement: React.FC = () => {
               />
             </View>
           </View>
-          <AddTrainingButton onAddTraining={sendMeasurement} />
+          <AddTrainingButton onAddTraining={sendMeasurement} title="Dodaj"/>
 
           <View>
             <Text style={styles.measureLabel}>Wcześniejsze pomiary</Text>
