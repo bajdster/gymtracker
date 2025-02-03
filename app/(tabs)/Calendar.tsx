@@ -4,6 +4,7 @@ import { LocaleConfig } from 'react-native-calendars';
 import { Text, TouchableOpacity, StyleSheet, View } from 'react-native';
 import { fetchAllTrainings } from '@/lib/trainingManagement';
 import { useState, useEffect } from 'react';
+import { getTrainingsNames } from '@/constants/Excercises';
 
 interface Training {
   date: string;
@@ -74,7 +75,6 @@ const TrainingsCalendar = () => {
   LocaleConfig.defaultLocale = 'pl';
 
   console.log(agendaItems)
-  console.log(allTrainings)
 
   return (
     <View style={{flex: 1, paddingHorizontal:8}}>
@@ -106,7 +106,7 @@ const TrainingsCalendar = () => {
         renderItem={(item, isFirst) => (
           <TouchableOpacity style={{ backgroundColor: '#1d1716', padding: 10, borderRadius: 5, marginRight: 5, marginTop: 5 }}>
             <Text style={{ color: 'white', fontWeight: 'bold', marginBottom:2 }}>{item.name}</Text>
-            <Text style={{ color: 'white' }}>{item.data}</Text>
+            <Text style={{ color: 'white' }}>{getTrainingsNames(item.data)}</Text>
           </TouchableOpacity>
         )}
         renderEmptyData={() => (

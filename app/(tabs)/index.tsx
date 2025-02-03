@@ -44,8 +44,10 @@ const styles = StyleSheet.create({
 //edycja calistenics i running
 //dodanie notatki do treningu 
 //dodać więcej ćwiczeń
-//dodac do statystyk ile łącznie kilogramów podniesionych i serii wykonanych (motywacyjne)
 
+
+//dodac do statystyk ile łącznie kilogramów podniesionych i serii wykonanych (motywacyjne)+
+//poprawić w kalendarzu aby wyświetłay się polskie nazwy+
 //łączenie kilku ćwiczeń w jeden trening w statystykach jeżeli zawieraja sie w tej samej dacie+
 //poprawa przycisku w measurement+
 //dodanie systemu oceniania treningu (gwiazdki)+

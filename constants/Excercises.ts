@@ -5,29 +5,31 @@ const exercises:{} = {
       "Wyciskanie hantli na ławce skośnej",
       "Rozpiętki z hantlami",
       "Wyciskanie sztangi na ławce skośnej",
-      "Rozpiętki przy użyciu linek"
+      "Rozpiętki przy użyciu linek",
+      "Rozpiętki na maszynie"
     ],
     back: [
-      "Podciąganie na drążku",
       "Ściąganie drążka nachwytem do klatki",
+      "Przyciąganie linki wyciągu siedząc",
+      "Podciąganie na drążku",
       "Martwy ciąg",
       "Wiosłowanie hantlami",
       "Wiosłowanie końcem sztangi w opadzie tułowia",
-      "Przyciąganie linki wyciągu siedząc"
     ],
     shoulder: [
       "Wyciskanie sztangi nad głowę stojąc",
       "Arnoldki -  wyciskanie hantli nad głowę z rotacją",
-      "Unoszenie hantli w bok",
       "Unoszenie hantli nad głowę klasyczne",
+      "Unoszenie hantli w bok",
       "Wyciskanie sztangi na maszynie siedząc"
     ],
     triceps: [
+        "Prostowanie ramion z linką wyciągu górnego",
         "Wyciskanie sztangi francuskie w leżeniu",
         "Wyciskanie hantli francuskie w leżeniu",
-        "Prostowanie ramion z linką wyciągu górnego",
         "Pompki na poręczach",
-        "Prostowanie ręki z hantlem w podparciu o ławkę"
+        "Prostowanie ręki z hantlem w podparciu o ławkę",
+        "Dipy o ławkę"
     ],
     legs: [
       "Przysiady ze sztangą/hantlem",
@@ -40,11 +42,12 @@ const exercises:{} = {
     ],
     biceps:[
         "Unoszenie hantli stylem młotkowym",
-        "Modlitewnik ze sztangą",
-        "Modlitewnik na maszynie",
-        "Wznosy hantli z rotacją siedząc",
         "Zginanie ramion ze sztangą łamaną stojąc",
-        "Zginanie przedramion z drążkiem wyciągu dolnego"
+        "Modlitewnik na maszynie",
+        "Modlitewnik ze sztangą",
+        "Wznosy hantli z rotacją siedząc",
+        "Zginanie przedramion z drążkiem wyciągu dolnego",
+        "Unoszenie hantli klasyczne"
     ],
     abs:[
         "Brzuszki z blokowaniem nóg",
@@ -59,7 +62,9 @@ const exercises:{} = {
     ],
     running:[
         "Bieg 1km",
+        "Bieg 2km",
         "Bieg 3km",
+        "Bieg 4km",
         "Bieg 5km",
         "Bieg 6km",
         "Bieg 10km",
@@ -73,6 +78,7 @@ const exercises:{} = {
     "Rozpiętki z hantlami": require('../assets/images/rozpietki_hantle.png'),
     "Wyciskanie sztangi na ławce skośnej": require('../assets/images/wyciskanie_sztangi_skos.png'),
     "Rozpiętki przy użyciu linek": require('../assets/images/rozpietki_brama.png'),
+    "Rozpiętki na maszynie": require('../assets/images/rozpietki_maszyna.png'),
 
     "Podciąganie na drążku": require("../assets/images/pullupExe.png"),
     "Ściąganie drążka nachwytem do klatki": require("../assets/images/sciaganie_nachwytem.png"),
@@ -92,6 +98,7 @@ const exercises:{} = {
     "Prostowanie ramion z linką wyciągu górnego": require("../assets/images/linka_wyciagu_gornego.png"),
     "Pompki na poręczach": require("../assets/images/dipy.png"),
     "Prostowanie ręki z hantlem w podparciu o ławkę": require("../assets/images/podparcie_o_lawke.png"),
+    "Dipy o ławkę": require("../assets/images/dipy_o_lawke.png"),
 
     "Przysiady ze sztangą/hantlem": require("../assets/images/przysiady_ze_sztanga.png"),
     "Wykroki z hantlami": require("../assets/images/wykroki_z_hantlami.png"),
@@ -107,6 +114,7 @@ const exercises:{} = {
     "Wznosy hantli z rotacją siedząc":  require("../assets/images/wznosy_hantli_siedzac.png"),
     "Zginanie ramion ze sztangą łamaną stojąc": require("../assets/images/sztanga_lamana_stojac.png"),
     "Zginanie przedramion z drążkiem wyciągu dolnego": require("../assets/images/wyciag_dolny.png"),
+    "Unoszenie hantli klasyczne": require("../assets/images/klasyczne_hantle.png"),
   };
   
 
