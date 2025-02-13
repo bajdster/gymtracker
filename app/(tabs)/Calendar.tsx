@@ -74,8 +74,6 @@ const TrainingsCalendar = () => {
 
   LocaleConfig.defaultLocale = 'pl';
 
-  console.log(agendaItems)
-
   return (
     <View style={{flex: 1, paddingHorizontal:8}}>
       <View style={styles.homePageSection}>

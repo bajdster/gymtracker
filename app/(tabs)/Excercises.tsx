@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, Modal, Pressable } from 'react-native';
-import React, { useState } from 'react';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, Modal, Pressable, Button } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import exercises from '@/constants/Excercises';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { imagesSources } from '@/constants/Excercises';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 
 const Excercises = () => {
   const [selectedBodypart, setSelectedBodypart] = useState<string>("chest");
@@ -33,6 +34,22 @@ const Excercises = () => {
     setIsModalVisible(false);
     setImageSource(null);
   };
+
+  //animation training
+  const opacity = useSharedValue<number>(0);
+
+  const handleFadeIn = () => {
+    opacity.value = withTiming(1, {duration:1000});
+  };
+
+  const animatedStyles = useAnimatedStyle(() => ({
+    opacity: opacity.value
+  }));
+
+  useEffect(()=>
+  {
+    handleFadeIn()
+  }, [])
 
   return (
     <ScrollView style={styles.homeMainBox}>
@@ -65,22 +82,24 @@ const Excercises = () => {
 
       <View style={{ marginTop: 20 }}>
         {exercises[selectedBodypart.toString()].map((exercise, index) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.exerciseLink}
-            onPress={() => handleOpenModal(imagesSources[exercise])}
-          >
-            <Text style={{ color: 'white', width: '60%' }}>{exercise}</Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-              <Image
-                source={imagesSources[exercise]}
-                style={{ width: 95, height: 95, marginRight: 10 }}
-                resizeMode="cover"
-              />
-              <AntDesign name="right" size={24} color="white" />
-            </View>
-          </TouchableOpacity>
+          <Animated.View style={animatedStyles} key={index}>
+            <TouchableOpacity
+              style={styles.exerciseLink}
+              onPress={() => handleOpenModal(imagesSources[exercise])}
+            >
+              <Text style={{ color: 'white', width: '60%' }}>{exercise}</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                <Image
+                  source={imagesSources[exercise]}
+                  style={{ width: 95, height: 95, marginRight: 10 }}
+                  resizeMode="cover"
+                />
+                <AntDesign name="right" size={24} color="white" />
+              </View>
+            </TouchableOpacity>
+          </Animated.View>
         ))}
+
       </View>
 
       {/* Modal */}

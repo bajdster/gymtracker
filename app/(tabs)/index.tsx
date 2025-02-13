@@ -44,8 +44,12 @@ const styles = StyleSheet.create({
 //edycja calistenics i running
 //dodanie notatki do treningu 
 //dodać więcej ćwiczeń
+//dodanie animacji fadeIn za pomocą react native reanimated
+//dodanie opisów ćwiczeń do taba Excercises kiedy dotkniemy touchableOpacity
+//dodanie notifications do aplikacji
 
 
+//filtrowanie po ćwiczeniu z przycisku w history+
 //dodac do statystyk ile łącznie kilogramów podniesionych i serii wykonanych (motywacyjne)+
 //poprawić w kalendarzu aby wyświetłay się polskie nazwy+
 //łączenie kilku ćwiczeń w jeden trening w statystykach jeżeli zawieraja sie w tej samej dacie+

@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, FlatList, TouchableOpacity, Modal, TextInput } 
 import { deleteTrainingFromDB, fetchAllTrainings } from '@/lib/trainingManagement';
 import { Collapsible } from '@/components/Collapsible';
 import { router } from 'expo-router';
+import exercises, { getTrainingsNames } from '@/constants/Excercises';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const History = () => {
   interface RepsState {
@@ -21,6 +23,7 @@ const History = () => {
 
   const [allTrainings, setAllTrainings] = useState<Training[]>([]);
   const [filteredTrainings, setFilteredTrainings] = useState<Training[]>([]);
+  const [trainingTypeFilter, setTrainingTypeFilter] = useState<string|null>()
   const [isLoading, setIsLoading] = useState<Boolean>(true);
   const [isDeleting, setIsDeleting] = useState<Boolean>(false);
   const [refreshing, setRefreshing] = useState<Boolean>(false);
@@ -68,6 +71,7 @@ const History = () => {
   };
 
   const handleInputChange = (value: string) => {
+    setTrainingTypeFilter(null)
     if (!value) {
       setFilteredTrainings(allTrainings);
     } else {
@@ -80,6 +84,26 @@ const History = () => {
       setFilteredTrainings(filtered); 
     }
   };
+
+  const handleExcerciseButtonFilters = (value:string) =>
+  {
+    if(value !== trainingTypeFilter)
+    {
+      const filtered = allTrainings.filter(training =>
+        {
+          const typeMatch = training.trainingType.toLowerCase().includes(value.toLowerCase());
+          return typeMatch
+        })
+        setFilteredTrainings(filtered); 
+        setTrainingTypeFilter(value)
+    }
+    if(value === trainingTypeFilter)
+    {
+      setTrainingTypeFilter(null)
+      setFilteredTrainings(allTrainings)
+    }
+
+  }
 
   const openEditModeHandler = (trainingType: string, item: Training) => {
     try {
@@ -155,6 +179,15 @@ const History = () => {
       </View>
       <View>
         <TextInput style={styles.filterInput} placeholder='Wpisz datę lub ćwiczenie' onChangeText={(value)=> handleInputChange(value)}/>
+      </View>
+      <View style={{flexDirection:'row', flexWrap:'wrap', justifyContent:'space-evenly', marginBottom:12}}>
+        {Object.keys(exercises).map((key)=>
+        {
+          return (<TouchableOpacity style={{backgroundColor:'#222831', padding:4, width:'30%', marginTop:10, borderRadius:10, justifyContent:'center', flexDirection:'row', ...(trainingTypeFilter && key !== trainingTypeFilter && { opacity:0.5})}} onPress={()=> {handleExcerciseButtonFilters(key)}}>
+            {key === trainingTypeFilter && <MaterialIcons name="cancel" size={20} color="black" />}
+            <Text key={key} style={{color:'white'}}>{getTrainingsNames(key)}</Text>
+          </TouchableOpacity>)
+        })}
       </View>
       <FlatList
         data={filteredTrainings}
@@ -258,7 +291,6 @@ const styles = StyleSheet.create({
   },
   filterInput:{
     backgroundColor:'#e0ffcd',
-    marginBottom: 20,
     height:50,
     borderRadius:10,
     padding:4,
