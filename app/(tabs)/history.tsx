@@ -183,9 +183,9 @@ const History = () => {
       <View style={{flexDirection:'row', flexWrap:'wrap', justifyContent:'space-evenly', marginBottom:12}}>
         {Object.keys(exercises).map((key)=>
         {
-          return (<TouchableOpacity style={{backgroundColor:'#222831', padding:4, width:'30%', marginTop:10, borderRadius:10, justifyContent:'center', flexDirection:'row', ...(trainingTypeFilter && key !== trainingTypeFilter && { opacity:0.5})}} onPress={()=> {handleExcerciseButtonFilters(key)}}>
+          return (<TouchableOpacity style={{backgroundColor:'#222831', padding:4, width:'30%', marginTop:10, borderRadius:10, justifyContent:'center', flexDirection:'row', ...(trainingTypeFilter && key !== trainingTypeFilter && { opacity:0.5})}} onPress={()=> {handleExcerciseButtonFilters(key)}} key={key} >
             {key === trainingTypeFilter && <MaterialIcons name="cancel" size={20} color="black" />}
-            <Text key={key} style={{color:'white'}}>{getTrainingsNames(key)}</Text>
+            <Text style={{color:'white'}}>{getTrainingsNames(key)}</Text>
           </TouchableOpacity>)
         })}
       </View>
