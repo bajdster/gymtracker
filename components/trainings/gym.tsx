@@ -34,7 +34,7 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler, initialItem }) =
   const [lastTrainingByExcercise, setLastTrainingByExcercise] = useState<Object>({})
   const [bestTraining, setBestTraining] = useState<Object | null>({})
   const [activeSeriesIndex, setActiveSeriesIndex] = useState<number | null>(null);
-  const [rating, setRating] = useState<Number>(1);
+  const [rating, setRating] = useState<Number>(3);
 
   const availableExercises: string[] = exercises[trainingType] || [];
 
