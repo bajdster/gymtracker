@@ -32,6 +32,7 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler, initialItem }) =
   const [imageSource, setImageSource] = useState(null);
   const [isImageLoading, setIsImageLoading] = useState<Boolean>(false);
   const [lastTrainingByExcercise, setLastTrainingByExcercise] = useState<Object>({})
+  const [bestTraining, setBestTraining] = useState<Object | null>({})
   const [activeSeriesIndex, setActiveSeriesIndex] = useState<number | null>(null);
   const [rating, setRating] = useState<Number>(1);
 
@@ -62,6 +63,7 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler, initialItem }) =
       setImageSource(source);
       setIsImageLoading(false);
       fetchLastTrainingByName(selectedExercise)
+      fetchBestTraining(selectedExercise)
     };
 
     if (selectedExercise) {
@@ -73,7 +75,7 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler, initialItem }) =
     return imagesSources[exerciseName] || null;
   };
 
-  const fetchLastTrainingByName = async (selectedExcercise:string) =>
+  const fetchLastTrainingByName = async (selectedExercise:string) =>
   {
     try {
       const allTrainings = await fetchAllTrainings();
@@ -86,6 +88,41 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler, initialItem }) =
       return null;
     }
   }
+
+  const fetchBestTraining = async (selectedExercise:string) => {
+    try {
+      const allTrainings = await fetchAllTrainings();
+      let bestTraining = null;
+      let maxScore = 0;
+  
+      const filteredTrainings = allTrainings.filter(
+        (training) => training.selectedExercise === selectedExercise
+      );
+
+      if(filteredTrainings.length <= 0)
+      {
+        setBestTraining(null)
+        return;
+      }
+  
+      filteredTrainings.forEach((training) => {
+        const totalScore = training.repsState.reduce((sum, rep) => sum + (parseInt(rep.reps, 10) * parseFloat(rep.weight)), 0);
+        
+        if (totalScore > maxScore) {
+          maxScore = totalScore;
+          bestTraining = training;
+        }
+      });
+  
+      if (bestTraining) {
+        setBestTraining(bestTraining);
+      }
+    } catch (error) {
+      console.error("Error fetching best training:", error);
+      return null;
+    }
+  };
+  
 
   const handleSeriesCountChange = (value: string) => {
     setSeriesCount(value);
@@ -252,6 +289,34 @@ const Gym: React.FC<GymProps> = ({ trainingType, onSendHandler, initialItem }) =
           </View>
 
           </View>: <Text style={{color:'white'}}>Brak ostatnich treninigów</Text>}
+        </View>}
+        
+        {!initialItem && <View style={styles.lastExcerciseTraining}>
+          <Text style={[styles.inputLabel, { color: 'white', fontWeight: 'bold'}]}>Najlepszy trening:  <Text style={{color:'#cbf078'}}>{selectedExercise}</Text>
+          </Text>
+
+          {bestTraining? 
+          <View>
+            <Text style={{color:'white'}}>{bestTraining.date}</Text>
+            <View style={{flexDirection:'row', justifyContent:'space-between', marginTop:10}}>
+                {bestTraining && bestTraining.repsState ? (
+                bestTraining.repsState.map((series, index) => (
+                  <View key={index} style={{backgroundColor:"#222831", padding:6, alignItems:'center', justifyContent:'center', borderRadius:8}}>
+                    <Text style={{ color: 'white', fontWeight:'bold', marginBottom:4 }}>
+                      Seria {index + 1}:
+                    </Text>
+                    <Text style={{ color: 'white', fontSize:12 }}>Powtorz. {series.reps}</Text>
+                    <Text style={{ color: 'white', fontSize:12 }}>Ciężar: {series.weight} kg</Text>
+                  </View>
+                ))
+              ) : (
+                <Text style={{ color: 'white' }}>Brak danych dla najlepszego treningu</Text>
+              )}
+          </View>
+
+          </View>: <Text style={{color:'white'}}>Brak najlepszych treninigów</Text>}
+
+
         </View>}
 
       </ScrollView>

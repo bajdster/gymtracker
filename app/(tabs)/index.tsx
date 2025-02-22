@@ -46,9 +46,10 @@ const styles = StyleSheet.create({
 //dodać więcej ćwiczeń
 //dodanie opisów ćwiczeń do taba Excercises kiedy dotkniemy touchableOpacity
 //dodanie notifications do aplikacji
-//pokazywanie najlepszych wyników z danego ćwiczenia danego dnia
+//dodanie użytkowników poprzez dodanie autentykacji a następnie filtrowanie treningów do user_id
 
 
+//pokazywanie najlepszych wyników z danego ćwiczenia danego dnia+
 //dodanie animacji fadeIn za pomocą react native reanimated+
 //filtrowanie po ćwiczeniu z przycisku w history+
 //dodac do statystyk ile łącznie kilogramów podniesionych i serii wykonanych (motywacyjne)+
