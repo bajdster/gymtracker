@@ -5,7 +5,7 @@ import SignInInput from '@/components/signInInput'
 const SignIn = () => {
   return (
     <View style={styles.mainBox}>
-      <View style={{width:'100%', alignItems:'center', paddingTop:14, height:300, justifyContent:'center', marginTop:10}}>
+      <View style={{width:'100%', alignItems:'center', paddingTop:14, height:120, justifyContent:'center', marginTop:10}}>
         <Image source={require("../../assets/images/logo.png")} style={{width:300, height:300}}/>
       </View>
         <SignInInput/>
