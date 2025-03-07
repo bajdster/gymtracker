@@ -166,6 +166,11 @@ export async function deleteTrainingFromDB(trainingId: string) {
   }
 }
 
+export async function createUser(userEmail:string, userPassword:string)
+{
+
+}
+
 // Firebase Realtime Database obsługuje podstawowe filtrowanie danych przy użyciu zapytań z metodami takimi jak orderBy, equalTo, startAt, endAt oraz limitToFirst i limitToLast.
 
 // const fetchTrainingsByType = async (trainingType: string): Promise<void> => {

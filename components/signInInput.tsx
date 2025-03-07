@@ -6,6 +6,10 @@ import {
 import AuthButton from './authButton';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
+import { auth } from "../firebaseConfig";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const SignInInput = () => {
 
@@ -30,11 +34,76 @@ const SignInInput = () => {
     }));
   };
 
-  const submitHandler = () => 
-  {
-    //different behave depend on isLogin state
-    console.log(credentails)
-  }
+  const getUserData = async () => {
+    try {
+      const userId = await AsyncStorage.getItem('userId');
+      if (userId !== null) {
+        console.log('ID użytkownika z AsyncStorage:', userId);
+      } else {
+        console.log('Brak zapisanych danych użytkownika w AsyncStorage');
+      }
+    } catch (error) {
+      console.error('Błąd przy pobieraniu danych z AsyncStorage:', error);
+    }
+  };
+
+  const submitHandler = async () => {
+    if (loginMode) {
+      // Logowanie
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, credentails.email, credentails.password);
+        console.log("Zalogowano:", userCredential.user);
+  
+        // Pobranie userId
+        const userId = userCredential.user.uid;
+  
+        // Zapisanie userId do AsyncStorage
+        await AsyncStorage.setItem("userId", userId);
+  
+        // Dalsza logika po zalogowaniu (np. przekierowanie do innej strony)
+        console.log("Zalogowany użytkownik ID:", userId);
+      } catch (error) {
+        console.error("Błąd logowania:", error.message);
+      }
+    } else {
+      // Rejestracja
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, credentails.email, credentails.password);
+        console.log("Zarejestrowano:", userCredential.user);
+  
+        // Pobranie userId
+        const userId = userCredential.user.uid;
+  
+        // Zapis danych użytkownika do Firebase Realtime Database (lub Firestore)
+        const userData = {
+          email: credentails.email,
+          // Inne dane użytkownika
+        };
+  
+        // Przechowywanie userId w pamięci (np. w stanie, AsyncStorage, Context API, Redux)
+        await AsyncStorage.setItem("userId", userId);
+  
+        // Zapisanie danych użytkownika
+        const response = await fetch(`https://gymtracker-c5f99-default-rtdb.firebaseio.com/users.json`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userData),
+        });
+  
+        if (response.ok) {
+          console.log("Dane użytkownika zostały zapisane w bazie danych.");
+        } else {
+          console.error("Błąd podczas zapisywania danych użytkownika:", response.status);
+        }
+      } catch (error) {
+        console.error("Błąd rejestracji:", error.message);
+      }
+    }
+  };
+  
+  
 
   return (
     <KeyboardAvoidingView 
