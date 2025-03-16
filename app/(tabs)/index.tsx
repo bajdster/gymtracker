@@ -1,11 +1,45 @@
 import { StyleSheet, Text, TouchableOpacity,ScrollView, View, Image } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import AddTraining from '@/components/addTraining'
 import HistoryShort from '@/components/historyShort'
+import { getUserEmail } from '@/lib/trainingManagement'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const Home = () => {
+
+  const [userEmail, setUserEmail] = useState()
+
+  useEffect(() => {
+    const fetchEmail = async () => {
+      const userId = await AsyncStorage.getItem('userId');
+      console.log("UserId from AsyncStorage:", userId);  // Dodajemy log do sprawdzenia wartości
+      if (userId) {
+        const email = await getUserEmail(userId);  // Używamy userId, aby pobrać email
+        setUserEmail(email);  // Ustawiamy stan z emailem
+      }
+    };
+  
+    fetchEmail();
+  }, []);
+
+  useEffect(()=>
+  {
+    console.log(userEmail)
+  }, [])
+
   return (
     <ScrollView style={styles.homeMainBox}>
+      <View style={styles.userSection}>
+        <View style={{flexDirection:'row', alignItems:'center'}}>
+          <FontAwesome name="user" size={24} color="white" />
+          <Text style={{color:'white', marginLeft:10}}>{userEmail}</Text>
+        </View>
+        <View style={{marginBottom:10}}>
+          <AntDesign name="poweroff" size={24} color="red" />
+        </View>
+      </View>
       <View style={styles.homePageSection}>
         <AddTraining/>
       </View>
@@ -34,6 +68,12 @@ const styles = StyleSheet.create({
         padding:4,
         marginBottom:10
     },
+    userSection:{
+      marginBottom:15,
+      flexDirection:'row',
+      justifyContent:'space-between',
+      alignItems:'center',
+    }
     
 })
 

@@ -166,9 +166,27 @@ export async function deleteTrainingFromDB(trainingId: string) {
   }
 }
 
-export async function createUser(userEmail:string, userPassword:string)
-{
+export async function getUserEmail(userId: string | null) {
+  if (!userId) {
+    return null;
+  }
+  try {
+    const response = await fetch(`https://gymtracker-c5f99-default-rtdb.firebaseio.com/users.json`);
+    const data = await response.json();
+    console.log("Data from Firebase:", data);  // Dodajemy log do sprawdzenia danych z Firebase
 
+    // Szukamy użytkownika po userId i zwracamy jego email
+    for (const key in data) {
+      if (data[key].userId === userId) {
+        return data[key].email;  // Zwracamy email użytkownika
+      }
+    }
+
+    return null;  // Jeśli nie znaleziono użytkownika, zwróć null
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return null;
+  }
 }
 
 // Firebase Realtime Database obsługuje podstawowe filtrowanie danych przy użyciu zapytań z metodami takimi jak orderBy, equalTo, startAt, endAt oraz limitToFirst i limitToLast.

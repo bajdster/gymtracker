@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   View, Text, StyleSheet, TextInput, TouchableOpacity, 
   KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback, Keyboard 
@@ -9,6 +9,7 @@ import Entypo from '@expo/vector-icons/Entypo';
 import { auth } from "../firebaseConfig";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from 'expo-router';
 
 
 const SignInInput = () => {
@@ -62,6 +63,7 @@ const SignInInput = () => {
   
         // Dalsza logika po zalogowaniu (np. przekierowanie do innej strony)
         console.log("Zalogowany użytkownik ID:", userId);
+        // router.push("/(tabs)")
       } catch (error) {
         console.error("Błąd logowania:", error.message);
       }
@@ -76,6 +78,7 @@ const SignInInput = () => {
   
         // Zapis danych użytkownika do Firebase Realtime Database (lub Firestore)
         const userData = {
+          userId: userId,
           email: credentails.email,
           // Inne dane użytkownika
         };
